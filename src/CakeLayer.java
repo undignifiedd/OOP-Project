@@ -15,7 +15,7 @@ public class CakeLayer {
     }
 
     public boolean isCorrect(CakeLayer other) {
-        if (this.ingredient.getName().equals(other.ingredient.getName())) {
+        if (this.ingredient.getName().equalsIgnoreCase(other.ingredient.getName())) {
             return true;
         } else {
             return false;

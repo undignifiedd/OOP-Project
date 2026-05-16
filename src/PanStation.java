@@ -1,12 +1,9 @@
-public class PanStation {
-    private String shape;
-    public PanStation(String shape){
-        this.shape=shape;
+public class PanStation extends CakeStation {
+    public PanStation(Ingredient ingredient){
+        super("PanStation",ingredient);
     }
-    public void applyToCake(Cake cake){
-        System.out.println("Pan shape applied: "+shape);
-    }
-    public String getShape() {
-        return shape;
+    @Override
+    public void applyToCake(Cake cake) {
+        cake.applyLayer(ingredient);
     }
 }
