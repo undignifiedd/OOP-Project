@@ -20,4 +20,5 @@ public class StateManager {
     public String getState() {
         return state;
     }
+
 }
