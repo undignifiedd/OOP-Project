@@ -3,9 +3,10 @@ public class Cake {
     private final int sequenceAmount=3;
 
     private CakeLayer[] cakeLayers;
-    private int numPairs, size;
+    private int numPairs, size, position;
     private boolean isComplete, isTrashed;
     public Cake(int numPairs){
+        this.position=0;
         this.numPairs=numPairs;
         this.size=(numPairs*3)+1;
         this.cakeLayers=new CakeLayer[size];
@@ -42,7 +43,12 @@ public class Cake {
         }
         return correct;
     }
-
+    public void setPosition(int position) {
+        this.position = position;
+    }
+    public int getPosition() {
+        return position;
+    }
     public CakeLayer[] getCakeLayers() {
         return cakeLayers;
     }
