@@ -28,7 +28,7 @@ public class StateManager {
 
     public static StateManager getInstance() {
         if (instance == null) {
-            instance = new StateManager(2);
+            instance = new StateManager(0);
         }
         return instance;
     }
@@ -44,7 +44,7 @@ public class StateManager {
         int numPairs = (int) (Math.random() * 3);
         Cake order = new Cake(numPairs);
         for (int i = 0; i < order.getCakeLayers().length; i++) {
-            int randomizer = (int) (Math.random() * 3) + 1;
+            int randomizer = (int) (Math.random() * 3);
             if (order.getCakeLayers()[i].getLayerType().equals("BATTER")) {
                 order.applyLayer(new Ingredient(BATTERS[randomizer], "BATTER"));
             } else if (order.getCakeLayers()[i].getLayerType().equals("ICING")) {
