@@ -1,8 +1,6 @@
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
-
 import javax.imageio.ImageIO;
 
 public class Player extends Entity implements GameObject {
@@ -15,17 +13,6 @@ public class Player extends Entity implements GameObject {
 
         setDefaultValues();
         getPlayerImage();
-    }
-
-    public void getCustomerImage() {
-
-        try {
-            customer = ImageIO.read(getClass().getResourceAsStream("/player/customer_one.png"));
-            gunHolding = ImageIO.read(getClass().getResourceAsStream("/player/gun_holding.png"));
-            gunFiring = ImageIO.read(getClass().getResourceAsStream("/player/gun_firing.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void getPlayerImage() {
@@ -63,23 +50,6 @@ public class Player extends Entity implements GameObject {
             direction = "right";
             x += speed;
         }
-    }
-
-    public void setCustomerDefault() {
-        x = 100;
-        y = 100;
-        speed = 0;
-    }
-
-    static ArrayList<Bullet> bullets;
-
-    public void fire() {
-        Bullet z = new Bullet((150 + 60), (172 + 154 / 2)); // x and y for where the bullet comes out of a gun
-        bullets.add(z);
-    }
-
-    public static ArrayList<Bullet> getBullets() {
-        return bullets;
     }
 
     public void draw(Graphics2D g2) {
