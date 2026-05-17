@@ -1,23 +1,41 @@
 import java.awt.*;
-import javax.swing.ImageIcon;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 public class Bullet {
     int x, y;
     Image img;
-    boolean isVisible;
+    int speed;
+    int width;
+    int height;
+    public BufferedImage bulletImg;
 
     public Bullet(int startX, int startY) {
-        x = startX;
-        y = startY;
-        ImageIcon newBullet = new ImageIcon("/player/bullet.png");
-        img = newBullet.getImage();
-        isVisible = true;
+        this.x = startX;
+        this.y = startY;
+        this.speed = 7;
+        this.width = 16;
+        this.height = 16;
+
+        try {
+            bulletImg = ImageIO.read(getClass().getResourceAsStream("/player/bullet.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void move() {
-        x += 2;
-        if (x > 100) { // to keep the bullet visible in the frame
-            isVisible = false;
+    public void update() {
+        x -= speed;
+    }
+
+    public void draw(Graphics2D g2) {
+        // 3. Draw the image instead of the vector circle
+        if (bulletImg != null) {
+            g2.drawImage(bulletImg, x, y, width, height, null);
+        } else {
+            // Fallback just in case the image fails to load
+            g2.fillRect(x, y, width, height);
         }
     }
 }
