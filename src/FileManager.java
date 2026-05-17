@@ -5,15 +5,13 @@ public class FileManager {
     Cake currentOrder;
     private static FileManager instance;
 
-    private File file = new File ("SCORE MANAGEMENT.txt");
+    private File file = new File("SCORE MANAGEMENT.txt");
     private BufferedWriter writer;
 
     private FileManager() {
-        StateManager stateManager = StateManager.getInstance();
         try {
             writer = new BufferedWriter(new FileWriter(file));
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             System.out.println("File not found");
         }
     }
@@ -24,23 +22,24 @@ public class FileManager {
         }
         return instance;
     }
+
     public void log(int sequenceNo, int cakeNo, int score,
-                    int sequenceScore, int sequenceStartScore, int threshHold){
+            int sequenceScore, int sequenceStartScore, int threshHold) {
         try {
             writer.write("Sequence Number: " + sequenceNo + "\n");
-            writer.write("Cake Number: "  + cakeNo + "\n");
+            writer.write("Cake Number: " + cakeNo + "\n");
             writer.write("Score: " + score + "\n");
-            writer.write("Sequence Score: " + sequenceScore +"\n");
+            writer.write("Sequence Score: " + sequenceScore + "\n");
             writer.write("Sequence Threshold: " + (threshHold) + "\n");
             writer.write("----------\n");
             writer.flush();
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
-    public File getFile(){
+
+    public File getFile() {
         return file;
     }
 }
