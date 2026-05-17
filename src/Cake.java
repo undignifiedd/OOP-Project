@@ -1,8 +1,12 @@
 public class Cake {
+
+    private final int sequenceAmount=3;
+
     private CakeLayer[] cakeLayers;
-    private int numPairs, size;
+    private int numPairs, size, position;
     private boolean isComplete, isTrashed;
     public Cake(int numPairs){
+        this.position=0;
         this.numPairs=numPairs;
         this.size=(numPairs*3)+1;
         this.cakeLayers=new CakeLayer[size];
@@ -30,13 +34,20 @@ public class Cake {
             }
         }
     }
-    public boolean matchesOrder(Cake other){
-        for (int i=0; i<cakeLayers.length;i++){
-            if (!this.cakeLayers[i].isCorrect(other.getCakeLayers()[i])){
-                return false;
+    public int matchesOrder(Cake other)  {
+        int correct=0;
+        for (int i=0; i<cakeLayers.length;i++) {
+            if (this.cakeLayers[i].isCorrect(other.getCakeLayers()[i])) {
+                correct++;
             }
         }
-        return true;
+        return correct;
+    }
+    public void setPosition(int position) {
+        this.position = position;
+    }
+    public int getPosition() {
+        return position;
     }
     public CakeLayer[] getCakeLayers() {
         return cakeLayers;
@@ -52,5 +63,8 @@ public class Cake {
     }
     public void setTrashed(boolean trashed) {
         isTrashed = trashed;
+    }
+    public int getNumPairs(){
+        return numPairs;
     }
 }
