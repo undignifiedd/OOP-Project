@@ -26,6 +26,7 @@ public class Customer extends Entity implements GameObject {
         try {
             customer = ImageIO.read(getClass().getResourceAsStream("/player/customer_one.png"));
             gunFiring = ImageIO.read(getClass().getResourceAsStream("/player/gun_firing.png"));
+            bulletImg = ImageIO.read(getClass().getResourceAsStream("/player/bullet.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -39,7 +40,7 @@ public class Customer extends Entity implements GameObject {
     }
 
     public void fire() {
-        Bullet z = new Bullet(x - 10, y + 30); // x and y for where the bullet comes out of a gun
+        Bullet z = new Bullet(x - 10, y + 30, bulletImg); // x and y for where the bullet comes out of a gun
         bullets.add(z);
     }
 

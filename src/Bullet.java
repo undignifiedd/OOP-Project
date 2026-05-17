@@ -11,7 +11,7 @@ public class Bullet {
     int height;
     public BufferedImage bulletImg;
 
-    public Bullet(int startX, int startY) {
+    public Bullet(int startX, int startY, BufferedImage bulletImg2) {
         this.x = startX;
         this.y = startY;
         this.speed = 7;
@@ -30,12 +30,8 @@ public class Bullet {
     }
 
     public void draw(Graphics2D g2) {
-        // 3. Draw the image instead of the vector circle
         if (bulletImg != null) {
             g2.drawImage(bulletImg, x, y, width, height, null);
-        } else {
-            // Fallback just in case the image fails to load
-            g2.fillRect(x, y, width, height);
         }
     }
 }
