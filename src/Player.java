@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Player extends Entity {
+public class Player extends Entity implements GameObject {
     GamePanel gamePanel;
     KeyHandler keyHandler;
 
@@ -47,6 +47,7 @@ public class Player extends Entity {
             direction = "left";
             x -= speed;
         } else if (keyHandler.rightKeyPressed == true) {
+            System.out.println(chef_right.getWidth() + " "  + chef_right.getHeight());
             direction = "right";
             x += speed;
         }
@@ -71,7 +72,7 @@ public class Player extends Entity {
                 break;
         }
         if (image != null) {
-            g2.drawImage(image, x, y, null);
+            g2.drawImage(image, x, y,48,96, null);
         }
     }
 }

@@ -28,7 +28,7 @@ public class StateManager {
 
     public static StateManager getInstance() {
         if (instance == null) {
-            instance = new StateManager(0);
+            instance = new StateManager(2);
         }
         return instance;
     }
@@ -37,10 +37,9 @@ public class StateManager {
         this.state = state;
     }
 
-    public int getState() {
+   public int getState(){
         return state;
-    }
-
+   }
     public Cake generateOrder() {
         int numPairs = (int) (Math.random() * 3);
         Cake order = new Cake(numPairs);

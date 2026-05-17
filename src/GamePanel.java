@@ -15,13 +15,14 @@ public class GamePanel extends JPanel implements Runnable {
 
     private ArrayList<GameObject> cafeObjects;
     private ArrayList<GameObject> bossFightObjects;
-    private ArrayList<GameObject> player;
     private Thread gameThread;
 
     private BufferedImage menuBackground, cafeBackground, bossFightBackground;
     private BufferedImage targetBackground;
 
     private StateManager stateManager;
+    private Player player;
+    private KeyHandler keyHandler;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -31,6 +32,10 @@ public class GamePanel extends JPanel implements Runnable {
         cafeObjects = new ArrayList<>();
         bossFightObjects = new ArrayList<>();
         this.stateManager = StateManager.getInstance();
+        keyHandler = new KeyHandler();
+        player= new Player(this,keyHandler);
+        bossFightObjects.add(player);
+        addKeyListener(keyHandler);
     }
 
     public void startThread() { // starting thread
@@ -83,8 +88,7 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        g2.drawImage(targetBackground, 0, 0, null);
-        if (stateManager.getState() == 1) {
+        if (stateManager.getState()==1) {
             for (GameObject object : cafeObjects) {
                 object.draw(g2);
             }
