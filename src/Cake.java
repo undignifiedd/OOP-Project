@@ -1,4 +1,7 @@
 public class Cake {
+
+    private final int sequenceAmount=3;
+
     private CakeLayer[] cakeLayers;
     private int numPairs, size;
     private boolean isComplete, isTrashed;
@@ -30,14 +33,16 @@ public class Cake {
             }
         }
     }
-    public boolean matchesOrder(Cake other){
-        for (int i=0; i<cakeLayers.length;i++){
-            if (!this.cakeLayers[i].isCorrect(other.getCakeLayers()[i])){
-                return false;
+    public int matchesOrder(Cake other)  {
+        int correct=0;
+        for (int i=0; i<cakeLayers.length;i++) {
+            if (this.cakeLayers[i].isCorrect(other.getCakeLayers()[i])) {
+                correct++;
             }
         }
-        return true;
+        return correct;
     }
+
     public CakeLayer[] getCakeLayers() {
         return cakeLayers;
     }
@@ -52,5 +57,8 @@ public class Cake {
     }
     public void setTrashed(boolean trashed) {
         isTrashed = trashed;
+    }
+    public int getNumPairs(){
+        return numPairs;
     }
 }

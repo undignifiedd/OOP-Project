@@ -13,7 +13,8 @@ public class GamePanel extends JPanel implements Runnable{
     private static final int screenHeight = tileSize*maxScreenRow; //screen dimension y
     private static final int FPS= 60;
 
-    private ArrayList<GameObject> gameObjects;
+    private ArrayList<GameObject> cafeObjects;
+    private ArrayList<GameObject> bossFightObjects;
     private Thread gameThread;
 
 
@@ -27,7 +28,8 @@ public class GamePanel extends JPanel implements Runnable{
         this.setBackground(Color.black);
         this.setDoubleBuffered(true);
         this.setFocusable(true);
-        gameObjects= new ArrayList<>();
+        cafeObjects= new ArrayList<>();
+        bossFightObjects = new ArrayList<>();
         this.stateManager= StateManager.getInstance();
     }
 
@@ -62,18 +64,20 @@ public class GamePanel extends JPanel implements Runnable{
         }
     }
     public void update(){
-        if (stateManager.getState().equalsIgnoreCase("Menu")){
+        if (stateManager.getState()==0){
             targetBackground = menuBackground;
         }
-        else if (stateManager.getState().equalsIgnoreCase("Cafe")) {
-            for (GameObject object : gameObjects) {
+        else if (stateManager.getState()==1) {
+            targetBackground = cafeBackground;
+            for (GameObject object : cafeObjects) {
                 object.update();
             }
-            targetBackground = cafeBackground;
         }
-        else if (stateManager.getState().equalsIgnoreCase("BossFight")){
-
+        else if (stateManager.getState()==2){
             targetBackground = bossFightBackground;
+            for (GameObject object : bossFightObjects){
+                object.update();
+            }
         }
     }
 
@@ -82,11 +86,17 @@ public class GamePanel extends JPanel implements Runnable{
         Graphics2D g2 = (Graphics2D) g;
 
         g2.drawImage(targetBackground,0,0,null);
-        if (stateManager.getState().equalsIgnoreCase("Menu")) {
-            for (GameObject object : gameObjects) {
+        if (stateManager.getState()==1) {
+            for (GameObject object : cafeObjects) {
                 object.draw(g2);
             }
         }
+        else if (stateManager.getState()==2) {
+            for (GameObject object : bossFightObjects) {
+                object.draw(g2);
+            }
+        }
+
         g2.dispose();
     }
 
@@ -96,7 +106,10 @@ public class GamePanel extends JPanel implements Runnable{
     public static int getScreenHeight(){
         return screenHeight;
     }
-    public void addGameObject(GameObject object){
-        gameObjects.add(object);
+    public void addGameObjectInCafe(GameObject object){
+        cafeObjects.add(object);
+    }
+    public void addGameObjectInBossFight(GameObject object){
+        bossFightObjects.add(object);
     }
 }
