@@ -5,7 +5,6 @@ import javax.imageio.ImageIO;
 
 public class Bullet {
     int x, y;
-    Image img;
     int speed;
     int width;
     int height;
@@ -14,7 +13,7 @@ public class Bullet {
     public Bullet(int startX, int startY, BufferedImage bulletImg2) {
         this.x = startX;
         this.y = startY;
-        this.speed = 7;
+        this.speed = 0;
         this.width = 16;
         this.height = 16;
 
@@ -33,5 +32,9 @@ public class Bullet {
         if (bulletImg != null) {
             g2.drawImage(bulletImg, x, y, width, height, null);
         }
+    }
+
+    public void move() {
+        speed = 10;
     }
 }

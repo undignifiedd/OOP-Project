@@ -13,13 +13,13 @@ public class KeyHandler implements KeyListener {
         int code = e.getKeyCode();
         if (code == KeyEvent.VK_W) {
             upKeyPressed = true;
-        } else if (code == KeyEvent.VK_A) {
+        }  else if (code == KeyEvent.VK_A) {
             leftKeyPressed = true;
-        } else if (code == KeyEvent.VK_S) {
+        }  else if (code == KeyEvent.VK_S) {
             downKeyPressed = true;
-        } else if (code == KeyEvent.VK_D) {
+        }  else if (code == KeyEvent.VK_D) {
             rightKeyPressed = true;
-        } else if (code == KeyEvent.VK_SPACE) {
+        }  else if (code == KeyEvent.VK_SPACE) {
             spaceBarPressed = true;
         }
     }

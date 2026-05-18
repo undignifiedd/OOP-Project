@@ -6,21 +6,22 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 public class Customer extends Entity implements GameObject {
-    GamePanel gamePanel;
+    KeyHandler keyHandler;
 
     private int shotCounter = 0;
-    private static int shotInterval = 90; // 90 frames
+    private final static int shotInterval = 45; // 90 frames
     private static ArrayList<Bullet> bullets = new ArrayList<>();
+    private GamePanel gamePanel;
+    private int batchNo;
 
-    public Customer(GamePanel gamePanel) {
-        this.gamePanel = gamePanel;
-
-        getCustomerImage();
+    public Customer(GamePanel gamePanel, KeyHandler keyHandler) {
+        this.keyHandler = keyHandler;
+        batchNo=1;
         setCustomerDefault();
+        getCustomerImage();
     }
 
     public void getCustomerImage() {
-
         try {
             customer = ImageIO.read(getClass().getResourceAsStream("/player/customer_one.png"));
             gunFiring = ImageIO.read(getClass().getResourceAsStream("/player/gun_firing.png"));
@@ -31,15 +32,22 @@ public class Customer extends Entity implements GameObject {
     }
 
     public void setCustomerDefault() {
-        x = 100;
-        y = 100;
-        speed = 4;
+        x = 680;
+        y = 229;
+        speed = 0;
         direction = "down";
     }
 
-    public void fire() {
-        Bullet z = new Bullet(x - 10, y + 30, bulletImg); // x and y for where the bullet comes out of a gun
+    public void fire() throws InterruptedException {
+        int randomX = (int)(Math.random()*30) +50;
+        int randomY = (int) (Math.random()*50) + 1;
+        Bullet z = new Bullet(randomX*10, randomY*10, bulletImg);
         bullets.add(z);
+        if (bullets.size() >= batchNo * 10) {
+            for (Bullet bullet : bullets) {
+                bullet.move();
+            }
+        }
     }
 
     public static ArrayList<Bullet> getBullets() {
@@ -54,17 +62,20 @@ public class Customer extends Entity implements GameObject {
             y -= speed;
         }
 
-        // boundary check
-        if (y >= 400) {
+        if (y >= 500) {
             direction = "up";
-        } else if (y <= 100) {
+        } else if (y <= 10) {
             direction = "down";
         }
 
         shotCounter++;
-        if (shotCounter >= shotInterval) {
-            fire();
-            shotCounter = 0; // Reset timer
+        try {
+            if (shotCounter + 20 >= shotInterval) {
+                fire();
+                shotCounter = 0;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
         for (int i = 0; i < bullets.size(); i++) {
@@ -80,12 +91,11 @@ public class Customer extends Entity implements GameObject {
 
     @Override
     public void draw(Graphics2D g2) {
-        BufferedImage image = customer; // Default fallback image
-
+        BufferedImage image = customer;
         image = gunFiring;
 
         if (image != null) {
-            g2.drawImage(image, x, y, 48, 96, null);
+            g2.drawImage(image, x, y, 60, 110, null);
         }
 
         for (Bullet b : bullets) {

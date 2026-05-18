@@ -4,11 +4,9 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Player extends Entity implements GameObject {
-    GamePanel gamePanel;
     KeyHandler keyHandler;
 
-    public Player(GamePanel gamePanel, KeyHandler keyHandler) {
-        this.gamePanel = gamePanel;
+    public Player(KeyHandler keyHandler) {
         this.keyHandler = keyHandler;
 
         setDefaultValues();
@@ -29,24 +27,35 @@ public class Player extends Entity implements GameObject {
     }
 
     public void setDefaultValues() {
-        x = 100;
-        y = 100;
+        x = 50;
+        y = 229;
         speed = 4;
         direction = "left";
     }
 
     public void update() {
-        if (keyHandler.upKeyPressed == true) {
+        if (x < 0) {
+            x = 0;
+        }
+        if (y < 0) {
+            y = 0;
+        }
+        if (x>725){
+            x = 725;
+        }
+        if (y>495){
+            y= 495;
+        }
+        if (keyHandler.upKeyPressed) {
             direction = "up";
             y -= speed;
-        } else if (keyHandler.downKeyPressed == true) {
+        } else if (keyHandler.downKeyPressed) {
             direction = "down";
             y += speed;
-        } else if (keyHandler.leftKeyPressed == true) {
+        } else if (keyHandler.leftKeyPressed) {
             direction = "left";
             x -= speed;
-        } else if (keyHandler.rightKeyPressed == true) {
-            System.out.println(chef_right.getWidth() + " " + chef_right.getHeight());
+        } else if (keyHandler.rightKeyPressed) {
             direction = "right";
             x += speed;
         }
