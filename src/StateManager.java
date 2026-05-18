@@ -2,22 +2,20 @@ public class StateManager {
 
     private static StateManager instance;
     private int state; // state 0: Menu, state 1: Cafe, state 2: Boss Fight
-    private int score;  // score log
-    private int sequenceScore; //resets every sequence
-    private int sequenceStartScore = 0; //sequenceScore-sequenceStartScore should not be less that threshHold.
+    private int score; // score log
+    private int sequenceScore; // resets every sequence
+    private int sequenceStartScore = 0; // sequenceScore-sequenceStartScore should not be less that threshHold.
     private int sequenceNo = 1;
     private int cakeNo = 1;
     private int threshHold;
     private int timer; // calculated based on difficulty. will implement later in fileManager
 
-
     private Cake currentOrder;
     private Cake playerCake;
 
-
-    private static final String[] BATTERS = {"Chocolate", "Vanilla", "Strawberry"};
-    private static final String[] ICINGS = {"Cream", "Fondant", "Glaze"};
-    private static final String[] TOPPINGS = {"Sprinkles", "Cherry", "Candle"};
+    private static final String[] BATTERS = { "Chocolate", "Vanilla", "Strawberry" };
+    private static final String[] ICINGS = { "Cream", "Fondant", "Glaze" };
+    private static final String[] TOPPINGS = { "Sprinkles", "Cherry", "Candle" };
 
     private FileManager fileManager;
 
@@ -37,9 +35,10 @@ public class StateManager {
         this.state = state;
     }
 
-   public int getState(){
+    public int getState() {
         return state;
-   }
+    }
+
     public Cake generateOrder() {
         int numPairs = (int) (Math.random() * 3);
         Cake order = new Cake(numPairs);
@@ -59,10 +58,9 @@ public class StateManager {
     }
 
     public void checkBossFightTrigger() {
-        if (sequenceScore<=threshHold){
+        if (sequenceScore <= threshHold) {
             setState(2);
-        }
-        else if (cakeNo >= 3) {
+        } else if (cakeNo >= 3) {
             score += 5;
             sequenceNo++;
             cakeNo = 0;
@@ -72,7 +70,7 @@ public class StateManager {
     }
 
     public void submitCake(Cake playerCake) {
-        this.playerCake= playerCake;
+        this.playerCake = playerCake;
         int correct = playerCake.matchesOrder(currentOrder);
         int cakeScore = correct - ((playerCake.getCakeLayers().length - correct) * 3);
         score += cakeScore;
