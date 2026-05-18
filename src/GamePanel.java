@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GamePanel extends JPanel implements Runnable {
     private static final int originalTileSize = 16; // actual size of each object
@@ -17,8 +18,8 @@ public class GamePanel extends JPanel implements Runnable {
     private static final int screenHeight = tileSize * maxScreenRow; // screen dimension y
     private static final int FPS = 60;
 
-    private ArrayList<GameObject> cafeObjects;
-    private ArrayList<GameObject> bossFightObjects;
+    private static ArrayList<GameObject> cafeObjects;
+    private static java.util.concurrent.CopyOnWriteArrayList<GameObject> bossFightObjects;
     private Thread gameThread;
 
     private BufferedImage menuBackground, cafeBackground, bossFightBackground;
@@ -30,7 +31,9 @@ public class GamePanel extends JPanel implements Runnable {
     private KeyHandler keyHandler;
     private ConveyerBelt conveyerBelt;
 
-    Rectangle startButton = new Rectangle(315, 150, 150, 50);
+    Rectangle startButton = new Rectangle(310, 130, 150, 60);
+    private boolean buttonPressed = false;
+    private int rainSpawnCounter = 0; // COUNTER FOR RAIN SPAWN TIME IN BOSSFIGHT
 
     public GamePanel() {
         this.setLayout(null);
@@ -41,19 +44,15 @@ public class GamePanel extends JPanel implements Runnable {
         this.setFocusable(true);
 
         cafeObjects = new ArrayList<>(); // instantiating arraylists
-        bossFightObjects = new ArrayList<>();
+        bossFightObjects = new CopyOnWriteArrayList<>();
 
         this.stateManager = StateManager.getInstance(); // calling stateManager instance
 
-<<<<<<< HEAD
-        keyHandler = new KeyHandler(); // needed to take keyInput
-=======
         keyHandler = new KeyHandler();// needed to take keyInput
         conveyerBelt = new ConveyerBelt(keyHandler);
         cafeObjects.add(conveyerBelt);
->>>>>>> 9bc34b7a387010554a4c295d2417c4d5bec1dfd3
 
-        player = new Player(this, keyHandler); // player instantiation
+        player = new Player( keyHandler); // player instantiation
         bossFightObjects.add(player);
         customer = new Customer(this); // customer instantiation
         bossFightObjects.add(customer);
@@ -63,13 +62,29 @@ public class GamePanel extends JPanel implements Runnable {
 
         // mouseListener to track when we click
         this.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-
+            public void mousePressed(MouseEvent e) {
                 if (stateManager.getState() == 0) {
                     if (startButton.contains(e.getPoint())) {
+                        buttonPressed = true;
+                        repaint();
+                    }
+                }
+            }
+
+            public void mouseReleased(MouseEvent e) {
+                if (stateManager.getState() == 0) {
+                    if (startButton.contains(e.getPoint()) && buttonPressed) {
+                        try {
+                            Thread.sleep(10);
+                        }
+                        catch (InterruptedException x){
+                            x.printStackTrace();
+                        }
                         stateManager.setState(1);
                     }
                 }
+                buttonPressed = false;
+                repaint();
             }
         });
 
@@ -112,6 +127,12 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
+        rainSpawnCounter++;  //SPAWNING RAIN
+        if (rainSpawnCounter >= 2) {
+            rainSpawnCounter = 0;
+            bossFightObjects.add(new Rain());
+        }
+
         if (stateManager.getState() == 0) {
             targetBackground = menuBackground;
         } else if (stateManager.getState() == 1) {
@@ -121,8 +142,13 @@ public class GamePanel extends JPanel implements Runnable {
             }
         } else if (stateManager.getState() == 2) {
             targetBackground = bossFightBackground;
-            for (GameObject object : bossFightObjects) {
-                object.update();
+            for (int i = 0; i < bossFightObjects.size(); i++) {
+                GameObject obj = bossFightObjects.get(i);
+                obj.update();
+                if (obj instanceof Rain rain && rain.getY() > 600) {
+                    bossFightObjects.remove(i);
+                    i--;
+                }
             }
         }
     }
@@ -135,7 +161,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         if (stateManager.getState() == 0) {
             // main button
-            g2.setColor(new Color(139, 90, 43)); // brownish wooden color
+            g2.setColor(buttonPressed ? new Color(100, 65, 30) : new Color(139, 90, 43)); // brownish wooden color
             g2.fillRoundRect(startButton.x, startButton.y, startButton.getSize().width, startButton.getSize().height,
                     20, 20);
             // borders
@@ -145,8 +171,8 @@ public class GamePanel extends JPanel implements Runnable {
                     20, 20);
             // text
             g2.setColor(Color.WHITE);
-            g2.setFont(new Font("Arial", Font.BOLD, 20));
-            g2.drawString("START", startButton.x + 40, startButton.y + 30);
+            g2.setFont(new Font("Arial", Font.BOLD, 25));
+            g2.drawString("START", startButton.x + 34, startButton.y + 35);
         }
 
         if (stateManager.getState() == 1) {

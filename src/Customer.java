@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 public class Customer extends Entity implements GameObject {
-    KeyHandler keyHandler;
 
     private int shotCounter = 0;
     private final static int shotInterval = 45; // 90 frames
@@ -14,8 +13,7 @@ public class Customer extends Entity implements GameObject {
     private GamePanel gamePanel;
     private int batchNo;
 
-    public Customer(GamePanel gamePanel, KeyHandler keyHandler) {
-        this.keyHandler = keyHandler;
+    public Customer(GamePanel gamePanel) {
         batchNo=1;
         setCustomerDefault();
         getCustomerImage();

@@ -14,8 +14,8 @@ public class Bullet {
         this.x = startX;
         this.y = startY;
         this.speed = 0;
-        this.width = 16;
-        this.height = 16;
+        this.width = 30;
+        this.height = 25;
 
         try {
             bulletImg = ImageIO.read(getClass().getResourceAsStream("/player/bullet.png"));

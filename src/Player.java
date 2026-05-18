@@ -14,13 +14,12 @@ public class Player extends Entity implements GameObject {
     }
 
     public void getPlayerImage() {
-
         try {
-            chef_right = ImageIO.read(getClass().getResourceAsStream("/player/cheffaceright.png"));
-            chef_kick_right = ImageIO.read(getClass().getResourceAsStream("/player/chefkickright.png"));
-            chef_left = ImageIO.read(getClass().getResourceAsStream("/player/cheffaceleft.png"));
-            chef_kick_left = ImageIO.read(getClass().getResourceAsStream("/player/chefkickleft.png"));
-            chef_up = ImageIO.read(getClass().getResourceAsStream("/player/chefback.png"));
+            chef_right = ImageIO.read(getClass().getResourceAsStream("player/cheffaceright.png"));
+            chef_kick_right = ImageIO.read(getClass().getResourceAsStream("player/chefkickright.png"));
+            chef_left = ImageIO.read(getClass().getResourceAsStream("player/cheffaceleft.png"));
+            chef_kick_left = ImageIO.read(getClass().getResourceAsStream("player/chefkickleft.png"));
+            chef_up = ImageIO.read(getClass().getResourceAsStream("player/chefback.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
