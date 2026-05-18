@@ -26,31 +26,35 @@ public class GamePanel extends JPanel implements Runnable {
 
     private StateManager stateManager;
     private Player player;
+    private Customer customer;
     private KeyHandler keyHandler;
 
-    Rectangle startButton = new Rectangle(315,150,150,50);
+    Rectangle startButton = new Rectangle(315, 150, 150, 50);
 
     public GamePanel() {
         this.setLayout(null);
 
-        this.setPreferredSize(new Dimension(screenWidth, screenHeight)); //setting base configuration for GamePanel
+        this.setPreferredSize(new Dimension(screenWidth, screenHeight)); // setting base configuration for GamePanel
         this.setBackground(Color.black);
         this.setDoubleBuffered(true);
         this.setFocusable(true);
 
-        cafeObjects = new ArrayList<>();   // instantiating arraylists
+        cafeObjects = new ArrayList<>(); // instantiating arraylists
         bossFightObjects = new ArrayList<>();
 
         this.stateManager = StateManager.getInstance(); // calling stateManager instance
 
-        keyHandler = new KeyHandler();  // needed to take keyInput
+        keyHandler = new KeyHandler(); // needed to take keyInput
 
-        player = new Player(this, keyHandler);  // player instantiation
+        player = new Player(this, keyHandler); // player instantiation
         bossFightObjects.add(player);
+        customer = new Customer(this); // customer instantiation
+        bossFightObjects.add(customer);
 
-        addKeyListener(keyHandler); // needed for input. keyHandler handles input through KeyEvent. keyEvent needs KeyListener
+        addKeyListener(keyHandler); // needed for input. keyHandler handles input through KeyEvent. keyEvent needs
+                                    // KeyListener
 
-        //mouseListener to track when we click
+        // mouseListener to track when we click
         this.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
 
@@ -65,8 +69,7 @@ public class GamePanel extends JPanel implements Runnable {
         // setting background pictures
         try {
             menuBackground = ImageIO.read(getClass().getResourceAsStream("Backgrounds/Menu Background.jpeg"));
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -121,20 +124,22 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        g2.drawImage(targetBackground,0,0,null);
+        g2.drawImage(targetBackground, 0, 0, null);
 
-        if (stateManager.getState()== 0){
+        if (stateManager.getState() == 0) {
             // main button
             g2.setColor(new Color(139, 90, 43)); // brownish wooden color
-            g2.fillRoundRect(startButton.x,startButton.y,startButton.getSize().width, startButton.getSize().height,20,20);
-            //borders
+            g2.fillRoundRect(startButton.x, startButton.y, startButton.getSize().width, startButton.getSize().height,
+                    20, 20);
+            // borders
             g2.setColor(Color.darkGray);
             g2.setStroke(new BasicStroke(3));
-            g2.drawRoundRect(startButton.x,startButton.y,startButton.getSize().width,startButton.getSize().height,20,20);
-            //text
+            g2.drawRoundRect(startButton.x, startButton.y, startButton.getSize().width, startButton.getSize().height,
+                    20, 20);
+            // text
             g2.setColor(Color.WHITE);
-            g2.setFont(new Font("Arial",Font.BOLD,20));
-            g2.drawString("START",startButton.x+40,startButton.y+30);
+            g2.setFont(new Font("Arial", Font.BOLD, 20));
+            g2.drawString("START", startButton.x + 40, startButton.y + 30);
         }
 
         if (stateManager.getState() == 1) {

@@ -7,18 +7,16 @@ import javax.imageio.ImageIO;
 
 public class Customer extends Entity implements GameObject {
     GamePanel gamePanel;
-    KeyHandler keyHandler;
 
     private int shotCounter = 0;
     private static int shotInterval = 90; // 90 frames
     private static ArrayList<Bullet> bullets = new ArrayList<>();
 
-    public Customer(GamePanel gamePanel, KeyHandler keyHandler) {
+    public Customer(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
-        this.keyHandler = keyHandler;
 
-        setCustomerDefault();
         getCustomerImage();
+        setCustomerDefault();
     }
 
     public void getCustomerImage() {
@@ -33,7 +31,7 @@ public class Customer extends Entity implements GameObject {
     }
 
     public void setCustomerDefault() {
-        x = 500;
+        x = 100;
         y = 100;
         speed = 4;
         direction = "down";
