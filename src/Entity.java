@@ -6,7 +6,7 @@ public class Entity {
     int speed;
 
     public BufferedImage chef_right, chef_kick_right, chef_left, chef_kick_left, chef_up;
-    public BufferedImage customer, gunFiring, bulletImg;
+    public BufferedImage customer, gunFiring, bulletImg, belt;
 
     public String direction;
 }
