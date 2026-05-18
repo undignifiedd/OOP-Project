@@ -28,6 +28,7 @@ public class GamePanel extends JPanel implements Runnable {
     private Player player;
     private Customer customer;
     private KeyHandler keyHandler;
+    private ConveyerBelt conveyerBelt;
 
     Rectangle startButton = new Rectangle(315, 150, 150, 50);
 
@@ -44,7 +45,13 @@ public class GamePanel extends JPanel implements Runnable {
 
         this.stateManager = StateManager.getInstance(); // calling stateManager instance
 
+<<<<<<< HEAD
         keyHandler = new KeyHandler(); // needed to take keyInput
+=======
+        keyHandler = new KeyHandler();// needed to take keyInput
+        conveyerBelt = new ConveyerBelt(keyHandler);
+        cafeObjects.add(conveyerBelt);
+>>>>>>> 9bc34b7a387010554a4c295d2417c4d5bec1dfd3
 
         player = new Player(this, keyHandler); // player instantiation
         bossFightObjects.add(player);
