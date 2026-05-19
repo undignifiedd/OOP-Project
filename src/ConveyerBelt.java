@@ -9,6 +9,7 @@ public class ConveyerBelt extends Entity implements GameObject{
         private int beltSpeed = 5;
         private String direction = "Forward";
         KeyHandler keyHandler;
+
         public ConveyerBelt(KeyHandler keyHandler){
             this.keyHandler=keyHandler;
 
@@ -46,7 +47,6 @@ public class ConveyerBelt extends Entity implements GameObject{
             return cake.isComplete();
         }
 
-        public int getBeltSpeed() { return beltSpeed; }
         public int getTimer() { return timer; }
         public String getDirection() { return direction; }
         public ArrayList<Cake> getCakes() { return cakes; }
@@ -54,6 +54,7 @@ public class ConveyerBelt extends Entity implements GameObject{
         public void setTimer(int timer) { this.timer = timer; }
         public void setDirection(String direction) { this.direction = direction; }
         public void setCakes(ArrayList<Cake> cakes) { this.cakes = cakes; }
+
    public void getBeltImage() {
         try { belt=ImageIO.read(getClass().getResourceAsStream("/Cake/conveyor_belt.png"));
         } catch (IOException e) {
@@ -65,6 +66,7 @@ public class ConveyerBelt extends Entity implements GameObject{
             x=0;
             y=300;
     }
+
     @Override
     public void update() {
             if (keyHandler.rightKeyPressed==true){

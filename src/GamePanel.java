@@ -94,6 +94,14 @@ public class GamePanel extends JPanel implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        // setting cafe background
+        try {
+            cafeBackground = ImageIO.read(getClass().getResourceAsStream("Cake/cafe_bg.jpg"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void startThread() { // starting thread
