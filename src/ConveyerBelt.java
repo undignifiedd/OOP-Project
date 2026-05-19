@@ -11,6 +11,8 @@ public class ConveyerBelt extends Entity implements GameObject{
         KeyHandler keyHandler;
         public ConveyerBelt(KeyHandler keyHandler){
             this.keyHandler=keyHandler;
+
+            getBeltImage();
             getDefaultValues();
         }
 
@@ -52,17 +54,16 @@ public class ConveyerBelt extends Entity implements GameObject{
         public void setTimer(int timer) { this.timer = timer; }
         public void setDirection(String direction) { this.direction = direction; }
         public void setCakes(ArrayList<Cake> cakes) { this.cakes = cakes; }
-   /* public void getBeltImage() {
-        try { belt=ImageIO.read(getClass().getResourceAsStream("Belt/ConveyerBelt.png"));
+   public void getBeltImage() {
+        try { belt=ImageIO.read(getClass().getResourceAsStream("/Cake/conveyor_belt.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    */
+
     public void getDefaultValues(){
             x=0;
-            y=350;
-            speed=4;
+            y=300;
     }
     @Override
     public void update() {
@@ -76,7 +77,7 @@ public class ConveyerBelt extends Entity implements GameObject{
     }
     @Override
     public void draw(Graphics2D g2) {
-        g2.drawImage(belt, x, y, 800, 50, null);
+        g2.drawImage(belt, x, y, 650, 50, null);
 
     }
 }
