@@ -79,7 +79,7 @@ public class ConveyerBelt extends Entity implements GameObject{
     }
     @Override
     public void draw(Graphics2D g2) {
-        g2.drawImage(belt, x, y, 650, 50, null);
+        g2.drawImage(belt, x, y, 650, 70, null);
 
     }
 }

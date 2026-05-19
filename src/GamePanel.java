@@ -30,6 +30,7 @@ public class GamePanel extends JPanel implements Runnable {
     private Customer customer;
     private KeyHandler keyHandler;
     private ConveyerBelt conveyerBelt;
+    private Cafe cafe;
 
     Rectangle startButton = new Rectangle(310, 130, 150, 60);
     private boolean buttonPressed = false;
@@ -51,6 +52,8 @@ public class GamePanel extends JPanel implements Runnable {
         keyHandler = new KeyHandler();// needed to take keyInput
         conveyerBelt = new ConveyerBelt(keyHandler);
         cafeObjects.add(conveyerBelt);
+        cafe = new Cafe(this);
+        cafeObjects.add(cafe);
 
         player = new Player( keyHandler); // player instantiation
         bossFightObjects.add(player);
@@ -97,7 +100,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         // setting cafe background
         try {
-            cafeBackground = ImageIO.read(getClass().getResourceAsStream("Cake/cafe_bg.jpg"));
+            cafeBackground = ImageIO.read(getClass().getResourceAsStream("Cake/pastel.jpg"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -187,7 +190,9 @@ public class GamePanel extends JPanel implements Runnable {
 
         if (stateManager.getState() == 1) {
             for (GameObject object : cafeObjects) {
-                object.draw(g2);
+                if (object != null) {
+                    object.draw(g2);
+                }
             }
         } else if (stateManager.getState() == 2) {
             for (GameObject object : bossFightObjects) {
