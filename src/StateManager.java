@@ -9,15 +9,17 @@ public class StateManager {
     private int cakeNo = 1;
     private int threshHold;
     private int timer; // calculated based on difficulty. will implement later in fileManager
+    private float fadeAlpha = 1f;
+    private boolean fading = false;
 
     private SoundManager soundManager;
 
     private Cake currentOrder;
     private Cake playerCake;
 
-    private static final String[] BATTERS = { "Chocolate", "Vanilla", "Strawberry" };
-    private static final String[] ICINGS = { "Cream", "Fondant", "Glaze" };
-    private static final String[] TOPPINGS = { "Sprinkles", "Cherry", "Candle" };
+    private static final String[] BATTERS = {"Chocolate", "Vanilla", "Strawberry"};
+    private static final String[] ICINGS = {"Cream", "Fondant", "Glaze"};
+    private static final String[] TOPPINGS = {"Sprinkles", "Cherry", "Candle"};
 
     private FileManager fileManager;
 
@@ -29,26 +31,34 @@ public class StateManager {
 
     public static StateManager getInstance() {
         if (instance == null) {
-            instance = new StateManager(2);
+            instance = new StateManager(3);
         }
         return instance;
     }
 
     public void setState(int state) {
-        long startTime = System.nanoTime();
-        long endTime = startTime;
-        this.state=state;
+        startFade();
         soundManager.stopMusic();
-        if (state==2){
+        if (state == 0) {
+            soundManager.playMusic("/Sounds/menuMusic.wav");
+        } else if (state == 1) {
+            soundManager.playMusic("/Sounds/cafeMusic.wav");
+        } else if (state == 2) {
             new Thread(() -> {
                 try {
                     Thread.sleep(2100);
                     soundManager.playOnce("/Sounds/gunShot.wav", () -> {
                         soundManager.playMusic("/Sounds/bossFightMusic.wav");
                     });
-                } catch (InterruptedException e) { e.printStackTrace(); }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }).start();
         }
+        else if (state == 3){
+            soundManager.playMusic("/Sounds/gameOverMusic.wav");
+        }
+        this.state = state;
     }
 
     public int getState() {
@@ -102,4 +112,23 @@ public class StateManager {
         currentOrder = generateOrder();
     }
 
+    public void startFade() {
+        fadeAlpha = 1f;
+        fading = true;
+    }
+
+    public float getFadeAlpha() {
+        return fadeAlpha;
+    }
+
+    public boolean getFading() {
+        return fading;
+    }
+
+    public void setFadeAlpha(float fadeAlpha) {
+        this.fadeAlpha = fadeAlpha;
+    }
+    public void setFading(boolean fading){
+        this.fading = fading;
+    }
 }
