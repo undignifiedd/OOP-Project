@@ -15,6 +15,7 @@ public class Cafe extends Entity implements GameObject {
             frosting = ImageIO.read(getClass().getResourceAsStream("Cake/frosting.png"));
             toppings = ImageIO.read(getClass().getResourceAsStream("Cake/toppings.png"));
             chef = ImageIO.read(getClass().getResourceAsStream("Cake/chef.png"));
+            pan = ImageIO.read(getClass().getResourceAsStream("Cake/pan.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -32,5 +33,6 @@ public class Cafe extends Entity implements GameObject {
         g2.drawImage(frosting, 205, 0, 170, 200, null);
         g2.drawImage(toppings, 405, 0, 150, 200, null);
         g2.drawImage(chef,600, 350, 175, 235, null);
+        g2.drawImage(pan, 5, 200, 150, 200, null);
     }
 }
