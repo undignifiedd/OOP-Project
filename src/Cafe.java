@@ -28,9 +28,9 @@ public class Cafe extends Entity implements GameObject {
 
     @Override
     public void draw(Graphics2D g2) {
-        g2.drawImage(batter, 0, 0, 150, 200, null);
-        g2.drawImage(frosting, 200, 0, 170, 200, null);
-        g2.drawImage(toppings, 400, 0, 150, 200, null);
-        g2.drawImage(chef,600, 310, 205, 275, null);
+        g2.drawImage(batter, 5, 0, 150, 200, null);
+        g2.drawImage(frosting, 205, 0, 170, 200, null);
+        g2.drawImage(toppings, 405, 0, 150, 200, null);
+        g2.drawImage(chef,600, 350, 175, 235, null);
     }
 }

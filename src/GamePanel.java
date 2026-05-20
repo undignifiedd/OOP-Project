@@ -32,6 +32,8 @@ public class GamePanel extends JPanel implements Runnable {
     private ConveyerBelt conveyerBelt;
     private Cafe cafe;
 
+    private java.util.concurrent.CopyOnWriteArrayList<CafeButton> cafeButtons;
+
     Rectangle startButton = new Rectangle(310, 130, 150, 60);
     private boolean buttonPressed = false;
     private int rainSpawnCounter = 0; // COUNTER FOR RAIN SPAWN TIME IN BOSSFIGHT
@@ -105,6 +107,7 @@ public class GamePanel extends JPanel implements Runnable {
             e.printStackTrace();
         }
 
+        cafeButtons = new java.util.concurrent.CopyOnWriteArrayList<>();
     }
 
     public void startThread() { // starting thread
@@ -188,12 +191,80 @@ public class GamePanel extends JPanel implements Runnable {
             g2.drawString("START", startButton.x + 34, startButton.y + 35);
         }
 
+
+        int btnWidth = 145;
+        int btnHeight = 60;
+        int startX = 20;
+        int startY = 378;
+        int padding = 45; // Gap between buttons
+
+        String[] sayings = {
+                "Chocolate", "Chocolate", "Candy",
+                "Strawberry", "Strawberry", "Smiley",
+                "Vanilla", "Vanilla", "Clover"
+        };
+
+        Runnable[] functions = {
+                () -> { System.out.println("Mixing the cake batter..."); },
+                () -> { System.out.println("Cake placed in the oven!"); },
+                () -> { System.out.println("Applying sweet frosting..."); },
+                () -> { System.out.println("Sprinkles added cleanly."); },
+                () -> { System.out.println("Topping cake with fresh berries."); },
+                () -> { System.out.println("Slicing the cake into portions."); },
+                () -> { System.out.println("Order served! Earned cash."); },
+                () -> { System.out.println("Cleared the workstation counter."); },
+                () -> { System.out.println("Oven upgraded! Baking speed increased."); }
+        };
+
+        for (int i = 0; i < 9; i++) {
+            int row = i / 3; // Row indices: 0, 1, 2
+            int col = i % 3; // Column indices: 0, 1, 2
+
+            int x = startX + col * (btnWidth + padding);
+            int y = startY + row * (btnHeight + 5);
+
+            cafeButtons.add(new CafeButton(sayings[i], x, y, btnWidth, btnHeight, functions[i]));
+        }
+
         if (stateManager.getState() == 1) {
             for (GameObject object : cafeObjects) {
                 if (object != null) {
                     object.draw(g2);
                 }
             }
+            for (CafeButton button : cafeButtons) {
+                button.draw(g2);
+            }
+            this.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    if (stateManager.getState() == 1) {
+                        for (CafeButton button : cafeButtons) {
+                            if (button.getBounds().contains(e.getPoint())) {
+                                button.setPressed(true);
+                                repaint();
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    if (stateManager.getState() == 1) {
+                        for (CafeButton button : cafeButtons) {
+                            if (button.getBounds().contains(e.getPoint())) {
+                                button.setPressed(false);
+
+                                button.triggerAction();
+
+                                repaint();
+                                break;
+                            }
+                        }
+                    }
+                }
+            });
         } else if (stateManager.getState() == 2) {
             for (GameObject object : bossFightObjects) {
                 object.draw(g2);
@@ -202,6 +273,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         g2.dispose();
     }
+
 
     public static int getScreenWidth() {
         return screenWidth;

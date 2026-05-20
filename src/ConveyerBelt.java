@@ -64,7 +64,7 @@ public class ConveyerBelt extends Entity implements GameObject{
 
     public void getDefaultValues(){
             x=0;
-            y=350;
+            y=320;
     }
 
     @Override
