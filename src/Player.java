@@ -5,9 +5,11 @@ import javax.imageio.ImageIO;
 
 public class Player extends Entity implements GameObject {
     KeyHandler keyHandler;
-
+    private StateManager stateManager;
     public Player(KeyHandler keyHandler) {
         this.keyHandler = keyHandler;
+
+        stateManager= StateManager.getInstance();
 
         setDefaultValues();
         getPlayerImage();
@@ -57,6 +59,9 @@ public class Player extends Entity implements GameObject {
         } else if (keyHandler.rightKeyPressed) {
             direction = "right";
             x += speed;
+        }
+        if (health<=0){
+            stateManager.setState(3);
         }
     }
 
