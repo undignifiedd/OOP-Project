@@ -37,6 +37,7 @@ public class GamePanel extends JPanel implements Runnable {
     Rectangle startButton = new Rectangle(310, 130, 150, 60);
     private boolean buttonPressed = false;
     private int rainSpawnCounter = 0; // COUNTER FOR RAIN SPAWN TIME IN BOSSFIGHT
+    private int dodgeTextCounter = 180;
 
     public GamePanel() {
         this.setLayout(null);
@@ -141,11 +142,6 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        rainSpawnCounter++;  //SPAWNING RAIN
-        if (rainSpawnCounter >= 2) {
-            rainSpawnCounter = 0;
-            bossFightObjects.add(new Rain());
-        }
 
         if (stateManager.getState() == 0) {
             targetBackground = menuBackground;
@@ -155,14 +151,29 @@ public class GamePanel extends JPanel implements Runnable {
                 object.update();
             }
         } else if (stateManager.getState() == 2) {
+            rainSpawnCounter++;  //SPAWNING RAIN
+            if (rainSpawnCounter >= 2) {
+                rainSpawnCounter = 0;
+                bossFightObjects.add(new Rain());
+            }
             targetBackground = bossFightBackground;
             for (int i = 0; i < bossFightObjects.size(); i++) {
                 GameObject obj = bossFightObjects.get(i);
-                obj.update();
                 if (obj instanceof Rain rain && rain.getY() > 600) {
                     bossFightObjects.remove(i);
                     i--;
                 }
+                if (obj instanceof Bullet b && b.getActive()) {
+                    System.out.println("Bullet: " + b.getX() + "," + b.getY() + " Player: " + player.x + "," + player.y);
+                    if (b.getBounds().intersects(player.getBounds())) {
+                        player.setHealth(Bullet.bulletDamage);
+                        b.setActive(false);
+                    }
+                }
+                if (obj instanceof Bullet b){
+                    System.out.println("Bullet: " + b.getActive() + "POSITION : {" + b.getX() + b.getY() +"}");
+                }
+                obj.update();
             }
         }
     }
@@ -266,6 +277,13 @@ public class GamePanel extends JPanel implements Runnable {
                 }
             });
         } else if (stateManager.getState() == 2) {
+           if (dodgeTextCounter>0) {
+                g2.setColor(Color.RED);
+                g2.setFont(new Font("Arial", Font.BOLD, 50));
+                g2.drawString("DODGE INCOMING", 150, 281);
+                g2.drawString ("BULLETS",245,341);
+                dodgeTextCounter--;
+            }
             for (GameObject object : bossFightObjects) {
                 object.draw(g2);
             }
@@ -287,7 +305,7 @@ public class GamePanel extends JPanel implements Runnable {
         cafeObjects.add(object);
     }
 
-    public void addGameObjectInBossFight(GameObject object) {
+    public static void addGameObjectInBossFight(GameObject object) {
         bossFightObjects.add(object);
     }
 }
