@@ -45,7 +45,7 @@ public class Bullet implements GameObject{
         speed = 10;
     }
     public Rectangle getBounds(){
-        return new Rectangle(x,y,width,height);
+        return new Rectangle(x,y,width-10,height-15);
     }
     public void setActive(boolean activation){
         active= activation;

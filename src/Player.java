@@ -41,8 +41,8 @@ public class Player extends Entity implements GameObject {
         if (y < 0) {
             y = 0;
         }
-        if (x>725){
-            x = 725;
+        if (x>226){
+            x = 226;
         }
         if (y>495){
             y= 495;
@@ -63,6 +63,7 @@ public class Player extends Entity implements GameObject {
         if (health<=0){
             stateManager.setState(3);
         }
+        System.out.println("Player X: " + x + "Player y: " + y) ;
     }
 
     public void draw(Graphics2D g2) {
