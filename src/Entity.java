@@ -12,7 +12,7 @@ public class Entity {
     public BufferedImage conveyor_belt;
     public BufferedImage batter, frosting, toppings;
     public BufferedImage chef, pan;
-
+    public BufferedImage chocolateBatter, strawberryBatter, vanillaBatter, chocolateIcing, strawberryIcing, vanillaIcing;
     public String direction;
 
     public void setHealth(int damage){
