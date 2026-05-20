@@ -11,7 +11,7 @@ public class Entity {
     public BufferedImage customer, gunFiring, bulletImg, belt;
     public BufferedImage conveyor_belt;
     public BufferedImage batter, frosting, toppings;
-    public BufferedImage chef;
+    public BufferedImage chef, pan;
 
     public String direction;
 
