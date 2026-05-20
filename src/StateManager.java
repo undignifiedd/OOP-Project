@@ -10,6 +10,8 @@ public class StateManager {
     private int threshHold;
     private int timer; // calculated based on difficulty. will implement later in fileManager
 
+    private SoundManager soundManager;
+
     private Cake currentOrder;
     private Cake playerCake;
 
@@ -21,18 +23,32 @@ public class StateManager {
 
     private StateManager(int state) {
         fileManager = FileManager.getInstance();
-        this.state = state;
+        soundManager = new SoundManager();
+        setState(state);
     }
 
     public static StateManager getInstance() {
         if (instance == null) {
-            instance = new StateManager(0);
+            instance = new StateManager(2);
         }
         return instance;
     }
 
     public void setState(int state) {
-        this.state = state;
+        long startTime = System.nanoTime();
+        long endTime = startTime;
+        this.state=state;
+        soundManager.stopMusic();
+        if (state==2){
+            new Thread(() -> {
+                try {
+                    Thread.sleep(2100);
+                    soundManager.playOnce("/Sounds/gunShot.wav", () -> {
+                        soundManager.playMusic("/Sounds/bossFightMusic.wav");
+                    });
+                } catch (InterruptedException e) { e.printStackTrace(); }
+            }).start();
+        }
     }
 
     public int getState() {

@@ -12,5 +12,4 @@ public class Main {
         window.setVisible(true);
         panel.startThread();
     }
-
 }

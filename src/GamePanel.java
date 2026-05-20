@@ -17,6 +17,8 @@ public class GamePanel extends JPanel implements Runnable {
     private static final int screenWidth = tileSize * maxScreenCol; // screen dimension x
     private static final int screenHeight = tileSize * maxScreenRow; // screen dimension y
     private static final int FPS = 60;
+    private final int bossFightTimer= 60*60;
+    private int currentTime = 0;
 
     private static ArrayList<GameObject> cafeObjects;
     private static java.util.concurrent.CopyOnWriteArrayList<GameObject> bossFightObjects;
@@ -196,26 +198,27 @@ public class GamePanel extends JPanel implements Runnable {
                 object.update();
             }
         } else if (stateManager.getState() == 2) {
-            rainSpawnCounter++;  //SPAWNING RAIN
-            if (rainSpawnCounter >= 2) {
-                rainSpawnCounter = 0;
-                bossFightObjects.add(new Rain());
-            }
-            targetBackground = bossFightBackground;
-            for (int i = 0; i < bossFightObjects.size(); i++) {
-                GameObject obj = bossFightObjects.get(i);
-                if (obj instanceof Rain rain && rain.getY() > 600) {
-                    bossFightObjects.remove(i);
-                    i--;
+                rainSpawnCounter++;  //SPAWNING RAIN
+                if (rainSpawnCounter >= 2) {
+                    rainSpawnCounter = 0;
+                    bossFightObjects.add(new Rain());
                 }
-                if (obj instanceof Bullet b && b.getActive()) {
-                    if (b.getBounds().intersects(player.getBounds())) {
-                        player.setHealth(Bullet.bulletDamage);
-                        b.setActive(false);
+                targetBackground = bossFightBackground;
+                for (int i = 0; i < bossFightObjects.size(); i++) {
+                    GameObject obj = bossFightObjects.get(i);
+                    if (obj instanceof Rain rain && rain.getY() > 600) {
+                        bossFightObjects.remove(i);
+                        i--;
                     }
-                }
-                obj.update();
+                    if (obj instanceof Bullet b && b.getActive()) {
+                        if (b.getBounds().intersects(player.getBounds())) {
+                            player.setHealth(Bullet.bulletDamage);
+                            b.setActive(false);
+                        }
+                    }
+                    obj.update();
             }
+            currentTime++;
         }
     }
 
@@ -260,8 +263,18 @@ public class GamePanel extends JPanel implements Runnable {
                 g2.drawString("BULLETS", 245, 341);
                 dodgeTextCounter--;
             }
-            for (GameObject object : bossFightObjects) {
-                object.draw(g2);
+            if (currentTime<bossFightTimer) {
+                g2.setColor(Color.GREEN);
+                g2.setFont(new Font("Arial", Font.BOLD, 20));
+                g2.drawString("Time Left: " + Integer.toString((bossFightTimer - currentTime) / 60), 550, 30);
+
+                for (GameObject object : bossFightObjects) {
+                    object.draw(g2);
+                }
+            }
+
+            else{
+                stateManager.setState(3);
             }
         } else if (stateManager.getState() == 3) {
             g2.setColor(Color.RED);
