@@ -66,6 +66,11 @@ public class GamePanel extends JPanel implements Runnable {
         bossFightObjects.add(customer);
 
         addKeyListener(keyHandler);
+        int btnWidth = 145;
+        int btnHeight = 60;
+        int startX = 20;
+        int startY = 378;
+        int padding = 45;
 
         String[] sayings = {
                 "Chocolate", "Chocolate", "Candy",
@@ -74,21 +79,16 @@ public class GamePanel extends JPanel implements Runnable {
         };
 
         Runnable[] functions = {
-                () -> { System.out.println("Mixing the cake batter..."); },
-                () -> { System.out.println("Cake placed in the oven!"); },
-                () -> { System.out.println("Applying sweet frosting..."); },
-                () -> { System.out.println("Sprinkles added cleanly."); },
-                () -> { System.out.println("Topping cake with fresh berries."); },
-                () -> { System.out.println("Slicing the cake into portions."); },
-                () -> { System.out.println("Order served! Earned cash."); },
-                () -> { System.out.println("Cleared the workstation counter."); },
-                () -> { System.out.println("Oven upgraded! Baking speed increased."); }
+                () -> { Ingredient ing = new Ingredient("Chocolate", "Batter"); ing.loadImage(); ing.startFalling(55, 250); cafeObjects.add(ing);},
+                () -> { Ingredient ing = new Ingredient("Chocolate", "Icing"); ing.loadImage(); ing.startFalling(265, 250); cafeObjects.add(ing); },
+                () -> { Ingredient ing = new Ingredient("candy", "Topping"); ing.loadImage(); ing.startFalling(460, 250); cafeObjects.add(ing); },
+                () -> { Ingredient ing = new Ingredient("Strawberry", "Batter"); ing.loadImage(); ing.startFalling(55, 250); cafeObjects.add(ing); },
+                () -> { Ingredient ing = new Ingredient("Strawberry", "Icing"); ing.loadImage(); ing.startFalling(265, 250); cafeObjects.add(ing); },
+                () -> { Ingredient ing = new Ingredient("smiley", "Topping"); ing.loadImage(); ing.startFalling(460, 250); cafeObjects.add(ing); },
+                () -> { Ingredient ing = new Ingredient("Vanilla", "Batter"); ing.loadImage(); ing.startFalling(55, 250); cafeObjects.add(ing); },
+                () -> { Ingredient ing = new Ingredient("Vanilla", "Icing"); ing.loadImage(); ing.startFalling(265, 250); cafeObjects.add(ing); },
+                () -> { Ingredient ing = new Ingredient("clover", "Topping"); ing.loadImage(); ing.startFalling(460, 250); cafeObjects.add(ing); }
         };
-        int btnWidth = 145;
-        int btnHeight = 60;
-        int startX = 20;
-        int startY = 378;
-        int padding = 45;
 
         for (int i = 0; i < 9; i++) {
             int row = i / 3;
