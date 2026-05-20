@@ -43,6 +43,8 @@ public class GamePanel extends JPanel implements Runnable {
     private int rainSpawnCounter = 0; // COUNTER FOR RAIN SPAWN TIME IN BOSSFIGHT
     private int dodgeTextCounter = 180;
 
+    private Cafe activeCafe;
+
     public GamePanel() {
         this.setLayout(null);
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -73,6 +75,10 @@ public class GamePanel extends JPanel implements Runnable {
         int startX = 20;
         int startY = 378;
         int padding = 45;
+
+
+        activeCafe = new Cafe(5, 200);
+        cafeObjects.add(activeCafe);
 
         String[] sayings = {
                 "Chocolate", "Chocolate", "Candy",
@@ -157,6 +163,7 @@ public class GamePanel extends JPanel implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
     public void startThread() { // starting thread
         gameThread = new Thread(this);
@@ -197,6 +204,9 @@ public class GamePanel extends JPanel implements Runnable {
             for (GameObject object : cafeObjects) {
                 object.update();
             }
+
+
+
         } else if (stateManager.getState() == 2) {
                 rainSpawnCounter++;  //SPAWNING RAIN
                 if (rainSpawnCounter >= 2) {
@@ -220,6 +230,7 @@ public class GamePanel extends JPanel implements Runnable {
             }
             currentTime++;
         }
+
     }
 
     public void paintComponent(Graphics g) {
