@@ -1,9 +1,10 @@
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Entity {
     protected int x;
     protected int y;
-    protected int health;
+    protected int health = 100;
     int speed;
 
     public BufferedImage chef_right, chef_kick_right, chef_left, chef_kick_left, chef_up;
@@ -13,4 +14,11 @@ public class Entity {
     public BufferedImage chef;
 
     public String direction;
+
+    public void setHealth(int damage){
+        health-=damage;
+    }
+    public Rectangle getBounds() {
+        return new Rectangle(x, y, 48,96);
+    }
 }

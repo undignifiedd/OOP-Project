@@ -1,4 +1,4 @@
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -78,6 +78,9 @@ public class Player extends Entity implements GameObject {
             default:
                 break;
         }
+        g2.setColor(Color.GREEN);
+        g2.setFont(new Font("Arial", Font.BOLD, 15));
+        g2.drawString(Integer.toString(health),x+5,y-3);
         if (image != null) {
             g2.drawImage(image, x, y, 48, 96, null);
         }

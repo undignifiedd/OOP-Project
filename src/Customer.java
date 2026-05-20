@@ -41,6 +41,7 @@ public class Customer extends Entity implements GameObject {
         int randomY = (int) (Math.random()*50) + 1;
         Bullet z = new Bullet(randomX*10, randomY*10, bulletImg);
         bullets.add(z);
+        GamePanel.addGameObjectInBossFight(z);
         if (bullets.size() >= batchNo * 10) {
             for (Bullet bullet : bullets) {
                 bullet.move();
@@ -80,7 +81,7 @@ public class Customer extends Entity implements GameObject {
             Bullet b = bullets.get(i);
             b.update();
 
-            if (b.x < 0) {
+            if (b.getX() < 0) {
                 bullets.remove(i);
                 i--;
             }
