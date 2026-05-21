@@ -101,4 +101,8 @@ public class Customer extends Entity implements GameObject {
             b.draw(g2);
         }
     }
+    public void reset(){
+        bullets.clear();
+        shotCounter= 0;
+    }
 }

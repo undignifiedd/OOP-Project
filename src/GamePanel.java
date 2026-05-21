@@ -5,7 +5,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -19,19 +18,20 @@ public class GamePanel extends JPanel implements Runnable {
     private static final int screenHeight = tileSize * maxScreenRow; // screen dimension y
     private static final int FPS = 60;
     private final int bossFightTimer = 60 * 60;
-    private int currentTime = 0;
+    private int bossFightTimePassed = 0;
 
     private static ArrayList<GameObject> cafeObjects;
     private static java.util.concurrent.CopyOnWriteArrayList<GameObject> bossFightObjects;
     private Thread gameThread;
 
-    private BufferedImage menuBackground, cafeBackground, bossFightBackground;
+    private BufferedImage menuBackground, cafeBackground, gameWinningBackground;
     private BufferedImage targetBackground;
     private BufferedImage image1;
     private BufferedImage image2;
     private BufferedImage image3;
 
     private StateManager stateManager;
+    private FileManager fileManager;
     private Player player;
     private Customer customer;
     private KeyHandler keyHandler;
@@ -39,19 +39,23 @@ public class GamePanel extends JPanel implements Runnable {
 
     private java.util.concurrent.CopyOnWriteArrayList<CafeButton> cafeButtons;
 
-    Rectangle startButton = new Rectangle(310, 130, 150, 60);
-    Rectangle replayButton = new Rectangle(290, 210, 200, 40);
     Rectangle brownRectangle = new Rectangle(310, 270, 150, 100);
+    Rectangle scoreRectangle;
     private boolean startButtonPressed = false;
     private boolean replayButtonPressed = false;
     private int rainSpawnCounter = 0; // COUNTER FOR RAIN SPAWN TIME IN BOSSFIGHT
     private int dodgeTextCounter = 180;
 
+    // buttons
+    Rectangle startButton = new Rectangle(310, 130, 150, 60);
+    Rectangle replayButton = new Rectangle(290, 210, 200, 40);
+    Rectangle exitButton = new Rectangle(300, 430, 180, 60);
     Rectangle howToPlayButton = new Rectangle(310, 200, 150, 60);
     Rectangle backButton = new Rectangle(20, 20, 100, 40);
 
     private boolean howToPlayPressed = false;
     private boolean backButtonPressed = false;
+    private boolean exitPressed = false;
     private ImageIcon tutorialGif;
 
     private Cafe cafe;
@@ -68,6 +72,7 @@ public class GamePanel extends JPanel implements Runnable {
         cafeButtons = new CopyOnWriteArrayList<>();
 
         this.stateManager = StateManager.getInstance();
+        this.fileManager = FileManager.getInstance();
 
         keyHandler = new KeyHandler();
         conveyerBelt = new ConveyerBelt(keyHandler);
@@ -98,7 +103,7 @@ public class GamePanel extends JPanel implements Runnable {
         int padding = 45;
 
 
-        cafe = new Cafe (5, 185); // Placed right under the batter station
+        cafe = new Cafe(5, 185); // Placed right under the batter station
         cafeObjects.add(cafe);
 
         String[] sayings = {
@@ -218,6 +223,11 @@ public class GamePanel extends JPanel implements Runnable {
                         backButtonPressed = true;
                         repaint();
                     }
+                } else if (stateManager.getState() == 5) {
+                    if (exitButton.contains(e.getPoint())) {
+                        exitPressed = true;
+                        repaint();
+                    }
                 }
             }
 
@@ -252,7 +262,9 @@ public class GamePanel extends JPanel implements Runnable {
                         } catch (InterruptedException x) {
                             x.printStackTrace();
                         }
-                        stateManager.setState(0);
+                        setReplayLogic();
+
+                        System.out.println("CURRENT SCORE: " + stateManager.getScore() + "Time: " + bossFightTimePassed + "Dodge Text: " + dodgeTextCounter);
                     }
                 } else if (stateManager.getState() == 4) {
                     if (backButton.contains(e.getPoint()) && backButtonPressed) {
@@ -263,12 +275,17 @@ public class GamePanel extends JPanel implements Runnable {
                         targetBackground = menuBackground;
                         repaint();
                     }
+                } else if (stateManager.getState() == 5) {
+                    if (exitButton.contains(e.getPoint()) && exitPressed) {
+                        System.exit(0);
+                    }
                 }
 
                 howToPlayPressed = false;
                 backButtonPressed = false;
                 startButtonPressed = false;
                 replayButtonPressed = false;
+                exitPressed = false;
                 repaint();
             }
         });
@@ -276,6 +293,7 @@ public class GamePanel extends JPanel implements Runnable {
         try {
             menuBackground = ImageIO.read(getClass().getResourceAsStream("Backgrounds/Menu Background.jpeg"));
             cafeBackground = ImageIO.read(getClass().getResourceAsStream("Backgrounds/purple.png"));
+            gameWinningBackground = ImageIO.read(getClass().getResourceAsStream("Backgrounds/GameWinning.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -336,14 +354,12 @@ public class GamePanel extends JPanel implements Runnable {
             }
 
 
-
         } else if (stateManager.getState() == 2) {
             rainSpawnCounter++;  //SPAWNING RAIN
             if (rainSpawnCounter >= 2) {
                 rainSpawnCounter = 0;
                 bossFightObjects.add(new Rain());
             }
-            targetBackground = bossFightBackground;
             for (int i = 0; i < bossFightObjects.size(); i++) {
                 GameObject obj = bossFightObjects.get(i);
                 if (obj instanceof Rain rain && rain.getY() > 600) {
@@ -352,15 +368,14 @@ public class GamePanel extends JPanel implements Runnable {
                 }
                 if (obj instanceof Bullet b && b.getActive()) {
                     if (b.getBounds().intersects(player.getBounds())) {
-                        player.setHealth(Bullet.bulletDamage);
+                        player.setHealth(player.getHealth() - Bullet.bulletDamage);
                         b.setActive(false);
                     }
                 }
                 obj.update();
             }
-            currentTime++;
+            bossFightTimePassed++;
         }
-
     }
 
     public void paintComponent(Graphics g) {
@@ -372,6 +387,12 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         if (stateManager.getState() == 0) {
+
+            //highScore
+
+            g2.setColor(new Color(145, 16, 85));
+            g2.setFont(new Font("Arial", Font.BOLD, 20));
+            g2.drawString("High Score: " + fileManager.getHighScore(), 600, 30);
             // main button
             g2.setColor(startButtonPressed ? new Color(100, 65, 30) : new Color(139, 90, 43)); // brownish wooden color
             g2.fillRoundRect(startButton.x, startButton.y, startButton.getSize().width, startButton.getSize().height,
@@ -397,6 +418,10 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         if (stateManager.getState() == 1) {
+
+            //drawing rectangle on mr cakey
+            g2.setColor(new Color(181, 196, 188));
+            g2.fill(new Rectangle(600, 170, 100, 100));
             for (GameObject object : cafeObjects) {
                 if (object != null) {
                     object.draw(g2);
@@ -405,6 +430,19 @@ public class GamePanel extends JPanel implements Runnable {
             for (CafeButton button : cafeButtons) {
                 button.draw(g2);
             }
+
+            //drawing score related stuff
+            scoreRectangle = new Rectangle(545, 20, 200, 80);
+            g2.draw(scoreRectangle);
+            g2.setColor(new Color(181, 196, 188));
+            g2.fill(scoreRectangle);
+            g2.setColor(new Color(9, 15, 130));
+            g2.setFont(new Font("Arial", Font.BOLD, 30));
+            g2.drawString("SCORE: " + stateManager.getScore(), 580, 50);
+            g2.setFont(new Font("Arial", Font.BOLD, 25));
+            g2.drawString("THRESHOLD: " + stateManager.getThreshHold(), 550, 80);
+
+
         } else if (stateManager.getState() == 2) {
             if (dodgeTextCounter > 0) {
                 g2.setColor(Color.RED);
@@ -413,16 +451,16 @@ public class GamePanel extends JPanel implements Runnable {
                 g2.drawString("BULLETS", 245, 341);
                 dodgeTextCounter--;
             }
-            if (currentTime < bossFightTimer) {
+            if (bossFightTimePassed < bossFightTimer) {
                 g2.setColor(Color.GREEN);
                 g2.setFont(new Font("Arial", Font.BOLD, 20));
-                g2.drawString("Time Left: " + Integer.toString((bossFightTimer - currentTime) / 60), 550, 30);
+                g2.drawString("Time Left: " + (bossFightTimer - bossFightTimePassed) / 60, 550, 30);
 
                 for (GameObject object : bossFightObjects) {
                     object.draw(g2);
                 }
             } else {
-                stateManager.setState(3);
+                stateManager.setState(5);
             }
         } else if (stateManager.getState() == 3) {
             //Game over text
@@ -447,12 +485,12 @@ public class GamePanel extends JPanel implements Runnable {
             g2.drawString("This is the closest we could get to visualize the", 50, (int) (brownRectangle.getY() + brownRectangle.getHeight() + 40));
             g2.drawString("mess you made", 280, (int) (brownRectangle.getY() + brownRectangle.getHeight()) + 70);
 
-            BufferedImage [] images = new BufferedImage[] {image1,image2,image3};
-                for (int i = 0; i < 10; i++) {
-                    double randomX = brownRectangle.x + Math.random() * brownRectangle.width;
-                    double randomY = brownRectangle.y + Math.random() * brownRectangle.height;
-                    g2.drawImage(images[(i % 3)], (int) randomX, (int) randomY, 30, 30, null);
-                }
+            BufferedImage[] images = new BufferedImage[]{image1, image2, image3};
+            for (int i = 0; i < 10; i++) {
+                double randomX = brownRectangle.x + Math.random() * brownRectangle.width;
+                double randomY = brownRectangle.y + Math.random() * brownRectangle.height;
+                g2.drawImage(images[(i % 3)], (int) randomX, (int) randomY, 30, 30, null);
+            }
 
             g2.setColor(replayButtonPressed ? new Color(100, 65, 30) : new Color(117, 32, 32)); // crimson red color
             g2.fillRoundRect(replayButton.x, replayButton.y, replayButton.getSize().width, replayButton.getSize().height,
@@ -489,6 +527,46 @@ public class GamePanel extends JPanel implements Runnable {
             g2.setColor(Color.WHITE);
             g2.setFont(new Font("Arial", Font.BOLD, 16));
             g2.drawString("BACK", backButton.x + 26, backButton.y + 25);
+        } else if (stateManager.getState() == 5) {
+            targetBackground = gameWinningBackground;
+            g2.setColor(exitPressed
+                    ? new Color(120, 20, 20)
+                    : new Color(180, 30, 30));
+
+            g2.fillRoundRect(
+                    exitButton.x,
+                    exitButton.y,
+                    exitButton.width,
+                    exitButton.height,
+                    20,
+                    20
+            );
+
+            g2.setColor(Color.BLACK);
+            g2.setStroke(new BasicStroke(3));
+
+            g2.drawRoundRect(
+                    exitButton.x,
+                    exitButton.y,
+                    exitButton.width,
+                    exitButton.height,
+                    20,
+                    20
+            );
+
+            g2.setColor(Color.WHITE);
+            g2.setFont(new Font("Arial", Font.BOLD, 28));
+
+            g2.drawString(
+                    "EXIT",
+                    exitButton.x + 52,
+                    exitButton.y + 38
+            );
+
+            //text on top
+            g2.setColor(Color.GREEN);
+            g2.setFont(new Font ("Arial",Font.BOLD,30));
+            g2.drawString("Thats enough Cake business for one day",70,180);
         }
         if (stateManager.getFading()) {
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, stateManager.getFadeAlpha()));
@@ -509,11 +587,20 @@ public class GamePanel extends JPanel implements Runnable {
         return screenHeight;
     }
 
-    public void addGameObjectInCafe(GameObject object) {
-        cafeObjects.add(object);
-    }
-
     public static void addGameObjectInBossFight(GameObject object) {
         bossFightObjects.add(object);
+    }
+
+    public void setReplayLogic() {
+        stateManager.setScore(0);
+        bossFightTimePassed = 0;
+        dodgeTextCounter = 180;
+        player.setHealth(100);
+        stateManager.setState(0);
+        customer.reset();
+        //clear old object arraylists
+        bossFightObjects.clear();
+        bossFightObjects.add(player);
+        bossFightObjects.add(customer);
     }
 }

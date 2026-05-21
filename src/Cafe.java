@@ -118,16 +118,35 @@ public class Cafe extends Entity implements GameObject {
         g2.drawImage(frosting, 205, 0, 170, 200, null);
         g2.drawImage(toppings, 405, 0, 150, 200, null);
         g2.drawImage(chef, 600, 350, 175, 235, null);
-        int drawY = 20;
+        int drawY = 200;
         Cake currentOrder = stateManager.getCurrentOrder();
         if (currentOrder == null) return; // safety check
         for (int i = 0; i < currentOrder.getCakeLayers().length; i++) {
             CakeLayer layer = currentOrder.getCakeLayers()[i];
             if (layer.getIngredient() == null) continue; // skip PAN
-            BufferedImage img = layer.getIngredient().getImage();
+            String name = layer.getIngredient().getName().toLowerCase();
+            String type = layer.getLayerType();
+            BufferedImage img;
+            img = layer.getIngredient().getImage();
+            if (type.equals("BATTER")) {
+                try {
+                    img = ImageIO.read(getClass().getResourceAsStream("Cake/" + name + "_" + type.toLowerCase()+".png"));
+                }
+                catch (IOException e){
+                    e.printStackTrace();
+                }
+                g2.drawImage(img,610,drawY-8,80,80,null);
+                drawY -= 20;
+            }
             if (img == null) continue; // skip if image not loaded
-            g2.drawImage(img, 620, drawY, 60, 60, null);
-            drawY += 65;
+            if (type.equals("ICING")) {
+                g2.drawImage(img, 620, drawY, 60, 60, null);
+                drawY -= 20;
+            }
+            if (type.equals("TOPPING")){
+                g2.drawImage(img,635,drawY+30,30,30,null);
+                drawY -= 20;
+            }
         }
         // g2.drawImage(pan, 5, 200, 150, 200, null);
 
