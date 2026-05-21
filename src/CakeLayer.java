@@ -15,11 +15,13 @@ public class CakeLayer {
     }
 
     public boolean isCorrect(CakeLayer other) {
-        if (this.ingredient.getName().equalsIgnoreCase(other.ingredient.getName())) {
+        if (this.layerType.equals("PAN") && other.layerType.equals("PAN")) {
             return true;
-        } else {
-            return false;
         }
+        if (this.ingredient == null || other.ingredient == null) {
+            return this.ingredient == other.ingredient; // both null = both PAN = correct
+        }
+            return this.ingredient.getName().equalsIgnoreCase(other.ingredient.getName());
     }
 
     public String getLayerType() {

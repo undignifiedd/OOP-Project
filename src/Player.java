@@ -63,7 +63,6 @@ public class Player extends Entity implements GameObject {
         if (health<=0){
             stateManager.setState(3);
         }
-        System.out.println("Player X: " + x + "Player y: " + y) ;
     }
 
     public void draw(Graphics2D g2) {

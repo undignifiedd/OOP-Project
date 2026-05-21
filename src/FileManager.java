@@ -24,13 +24,12 @@ public class FileManager {
     }
 
     public void log(int sequenceNo, int cakeNo, int score,
-            int sequenceScore, int sequenceStartScore, int threshHold) {
+            int sequenceScore, int sequenceStartScore) {
         try {
             writer.write("Sequence Number: " + sequenceNo + "\n");
             writer.write("Cake Number: " + cakeNo + "\n");
             writer.write("Score: " + score + "\n");
             writer.write("Sequence Score: " + sequenceScore + "\n");
-            writer.write("Sequence Threshold: " + (threshHold) + "\n");
             writer.write("----------\n");
             writer.flush();
         } catch (IOException e) {

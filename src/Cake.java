@@ -5,19 +5,15 @@ public class Cake {
     private CakeLayer[] cakeLayers;
     private int numPairs, size, position;
     private boolean isComplete, isTrashed;
-    public Cake(int numPairs){
-        this.position=0;
-        this.numPairs=numPairs;
-        this.size=(numPairs*3)+1;
-        this.cakeLayers=new CakeLayer[size];
-        for (int i =0; i<numPairs;i++){
-            cakeLayers[i*3]=new CakeLayer("PAN");
-             cakeLayers[i*3+1]=new CakeLayer("BATTER");
-             cakeLayers[i*3+2]=new CakeLayer("ICING");
-        }
-        cakeLayers[numPairs*3]=new CakeLayer("TOPPING");
-        this.isComplete=false;
-        this.isTrashed=false;
+    public Cake() {
+        this.position = 0;
+        this.size = 3;
+        this.cakeLayers = new CakeLayer[3];
+        cakeLayers[0] = new CakeLayer("BATTER");
+        cakeLayers[1] = new CakeLayer("ICING");
+        cakeLayers[2] = new CakeLayer("TOPPING");
+        this.isComplete = false;
+        this.isTrashed = false;
     }
     public void applyLayer(Ingredient ingredient){
         for (CakeLayer c: cakeLayers){

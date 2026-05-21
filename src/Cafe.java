@@ -9,20 +9,21 @@ public class Cafe extends Entity implements GameObject {
     private int targetX;
     private final int speed = 2;
 
+    private StateManager stateManager;
+
     // stage 0: empty pan, 1: batter, 2: icing, 3: toppings
     private int stage = 0;
     private String flavor = "";
     private String icing = "";
     private String topping = "";
 
+    private Cake playerCake;
     private BufferedImage currentImage;
 
-    public Cafe (GamePanel gamePanel) {
-
+    public Cafe(int startX, int startY) {
+        stateManager = StateManager.getInstance();
+        playerCake = new Cake();
         getMachineImages();
-    }
-
-    public Cafe (int startX, int startY) {
         this.x = startX;
         this.y = startY;
         this.targetX = startX;
@@ -60,7 +61,9 @@ public class Cafe extends Entity implements GameObject {
             candy = ImageIO.read(getClass().getResourceAsStream("Ingredients/candyTopping.png"));
             clover = ImageIO.read(getClass().getResourceAsStream("Ingredients/cloverTopping.png"));
 
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void addBatter(String flavor) {
@@ -77,6 +80,7 @@ public class Cafe extends Entity implements GameObject {
             // Move forward to the Icing station
             this.targetX = this.x + 200;
         }
+        playerCake.applyLayer(new Ingredient(flavor, "Batter"));
     }
 
     public void addIcing(String icingType) {
@@ -85,6 +89,7 @@ public class Cafe extends Entity implements GameObject {
             this.stage = 2;
             this.targetX = this.x + 200; // Move forward to toppings station
         }
+        playerCake.applyLayer(new Ingredient(icingType, "Icing"));
     }
 
     public void addTargetTopping(String toppingType) {
@@ -93,6 +98,9 @@ public class Cafe extends Entity implements GameObject {
             this.stage = 3;
             this.targetX = this.x + 200;
         }
+        playerCake.applyLayer(new Ingredient(toppingType, "Topping"));
+        stateManager.submitCake(playerCake);
+        reset();
     }
 
     @Override
@@ -110,6 +118,17 @@ public class Cafe extends Entity implements GameObject {
         g2.drawImage(frosting, 205, 0, 170, 200, null);
         g2.drawImage(toppings, 405, 0, 150, 200, null);
         g2.drawImage(chef, 600, 350, 175, 235, null);
+        int drawY = 20;
+        Cake currentOrder = stateManager.getCurrentOrder();
+        if (currentOrder == null) return; // safety check
+        for (int i = 0; i < currentOrder.getCakeLayers().length; i++) {
+            CakeLayer layer = currentOrder.getCakeLayers()[i];
+            if (layer.getIngredient() == null) continue; // skip PAN
+            BufferedImage img = layer.getIngredient().getImage();
+            if (img == null) continue; // skip if image not loaded
+            g2.drawImage(img, 620, drawY, 60, 60, null);
+            drawY += 65;
+        }
         // g2.drawImage(pan, 5, 200, 150, 200, null);
 
         if (currentImage != null) {
@@ -137,8 +156,23 @@ public class Cafe extends Entity implements GameObject {
         }
     }
 
-    public int getX() { return x; }
-    public int getStage() { return stage; }
+    public int getX() {
+        return x;
+    }
+
+    public int getStage() {
+        return stage;
+    }
+    public void reset() {
+        stage = 0;
+        flavor = "";
+        icing = "";
+        topping = "";
+        currentImage = panEmptyImg;
+        x = 5;
+        targetX = 5;
+        playerCake = new Cake();
+    }
 
 }
 

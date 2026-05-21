@@ -7,7 +7,6 @@ public class StateManager {
     private int sequenceStartScore = 0; // sequenceScore-sequenceStartScore should not be less that threshHold.
     private int sequenceNo = 1;
     private int cakeNo = 1;
-    private int threshHold;
     private int timer; // calculated based on difficulty. will implement later in fileManager
     private float fadeAlpha = 1f;
     private boolean fading = false;
@@ -18,8 +17,8 @@ public class StateManager {
     private Cake playerCake;
 
     private static final String[] BATTERS = {"Chocolate", "Vanilla", "Strawberry"};
-    private static final String[] ICINGS = {"Cream", "Fondant", "Glaze"};
-    private static final String[] TOPPINGS = {"Sprinkles", "Cherry", "Candle"};
+    private static final String[] ICINGS = {"Chocolate", "Vanilla", "Strawberry"};
+    private static final String[] TOPPINGS = {"candy", "smiley", "clover"};
 
     private FileManager fileManager;
 
@@ -31,7 +30,7 @@ public class StateManager {
 
     public static StateManager getInstance() {
         if (instance == null) {
-            instance = new StateManager(0);
+            instance = new StateManager(1);
         }
         return instance;
     }
@@ -42,6 +41,7 @@ public class StateManager {
         if (state == 0) {
             soundManager.playMusic("/Sounds/menuMusic.wav");
         } else if (state == 1) {
+            currentOrder = generateOrder();
             soundManager.playMusic("/Sounds/cafeMusic.wav");
         } else if (state == 2) {
             new Thread(() -> {
@@ -66,32 +66,37 @@ public class StateManager {
     }
 
     public Cake generateOrder() {
-        int numPairs = (int) (Math.random() * 3);
-        Cake order = new Cake(numPairs);
+        Cake order = new Cake();
         for (int i = 0; i < order.getCakeLayers().length; i++) {
             int randomizer = (int) (Math.random() * 3);
             if (order.getCakeLayers()[i].getLayerType().equals("BATTER")) {
-                order.applyLayer(new Ingredient(BATTERS[randomizer], "BATTER"));
+                Ingredient ing = new Ingredient(BATTERS[randomizer], "Batter");
+                ing.loadImage();
+                order.applyLayer(ing);
             } else if (order.getCakeLayers()[i].getLayerType().equals("ICING")) {
-                order.applyLayer(new Ingredient(ICINGS[randomizer], "ICING"));
+                Ingredient ing = new Ingredient(ICINGS[randomizer], "Icing");
+                ing.loadImage();
+                order.applyLayer(ing);
             } else if (order.getCakeLayers()[i].getLayerType().equals("TOPPING")) {
-                order.applyLayer(new Ingredient(TOPPINGS[randomizer], "TOPPING"));
+                Ingredient ing = new Ingredient(TOPPINGS[randomizer], "Topping");
+                ing.loadImage();
+                order.applyLayer(ing);
             } else if (order.getCakeLayers()[i].getLayerType().equals("PAN")) {
-                order.applyLayer(new Ingredient("Pan", "PAN"));
+                order.applyLayer(new Ingredient("Pan", "Pan"));
             }
         }
         return order;
     }
 
     public void checkBossFightTrigger() {
-        if (sequenceScore <= threshHold) {
-            setState(2);
-        } else if (cakeNo >= 3) {
+        if (cakeNo >= 5) {
             score += 5;
             sequenceNo++;
             cakeNo = 0;
             sequenceScore = 0;
             sequenceStartScore = score;
+        } else if (score - sequenceStartScore <=-9 ) {
+            setState(2);
         }
     }
 
@@ -101,10 +106,15 @@ public class StateManager {
         int cakeScore = correct - ((playerCake.getCakeLayers().length - correct) * 3);
         score += cakeScore;
         sequenceScore += cakeScore;
-        threshHold = sequenceStartScore - 9;
         cakeNo++;
-        fileManager.log(sequenceNo, cakeNo, score, sequenceScore, sequenceStartScore, threshHold);
-        if (correct == 0) {
+        fileManager.log(sequenceNo, cakeNo, score, sequenceScore, sequenceStartScore);
+        System.out.println("correct: " + correct + " layers: " + playerCake.getCakeLayers().length);
+        for (int i = 0; i < playerCake.getCakeLayers().length; i++) {
+            CakeLayer p = playerCake.getCakeLayers()[i];
+            CakeLayer o = currentOrder.getCakeLayers()[i];
+            System.out.println("Layer " + i + ": player=" + (p.getIngredient() != null ? p.getIngredient().getName() : "null") + " order=" + (o.getIngredient() != null ? o.getIngredient().getName() : "null"));
+        }
+        if (correct == 1) {
             instance.setState(2);
         } else {
             checkBossFightTrigger();
@@ -130,5 +140,8 @@ public class StateManager {
     }
     public void setFading(boolean fading){
         this.fading = fading;
+    }
+    public Cake getCurrentOrder(){
+        return currentOrder;
     }
 }

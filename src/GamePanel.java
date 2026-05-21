@@ -36,7 +36,6 @@ public class GamePanel extends JPanel implements Runnable {
     private Customer customer;
     private KeyHandler keyHandler;
     private ConveyerBelt conveyerBelt;
-    private Cafe cafe;
 
     private java.util.concurrent.CopyOnWriteArrayList<CafeButton> cafeButtons;
 
@@ -48,7 +47,7 @@ public class GamePanel extends JPanel implements Runnable {
     private int rainSpawnCounter = 0; // COUNTER FOR RAIN SPAWN TIME IN BOSSFIGHT
     private int dodgeTextCounter = 180;
 
-    private Cafe currentActiveCake;
+    private Cafe cafe;
 
     public GamePanel() {
         this.setLayout(null);
@@ -66,8 +65,6 @@ public class GamePanel extends JPanel implements Runnable {
         keyHandler = new KeyHandler();
         conveyerBelt = new ConveyerBelt(keyHandler);
         cafeObjects.add(conveyerBelt);
-        cafe = new Cafe(this);
-        cafeObjects.add(cafe);
 
         player = new Player(keyHandler);
         bossFightObjects.add(player);
@@ -82,8 +79,8 @@ public class GamePanel extends JPanel implements Runnable {
         int padding = 45;
 
 
-        currentActiveCake = new Cafe (5, 185); // Placed right under the batter station
-        cafeObjects.add(currentActiveCake);
+        cafe = new Cafe (5, 185); // Placed right under the batter station
+        cafeObjects.add(cafe);
 
         String[] sayings = {
                 "Chocolate", "Chocolate", "Candy",
@@ -98,7 +95,7 @@ public class GamePanel extends JPanel implements Runnable {
                     ing.startFalling(55, 250);
                     cafeObjects.add(ing);
 
-                    currentActiveCake.addBatter("Chocolate");
+                    cafe.addBatter("Chocolate");
                 },
                 () -> {
                     Ingredient ing = new Ingredient("Chocolate", "Icing");
@@ -106,7 +103,7 @@ public class GamePanel extends JPanel implements Runnable {
                     ing.startFalling(265, 250);
                     cafeObjects.add(ing);
 
-                    currentActiveCake.addIcing("Chocolate");
+                    cafe.addIcing("Chocolate");
                 },
                 () -> {
                     Ingredient ing = new Ingredient("candy", "Topping");
@@ -114,7 +111,7 @@ public class GamePanel extends JPanel implements Runnable {
                     ing.startFalling(460, 250);
                     cafeObjects.add(ing);
 
-                    currentActiveCake.addTargetTopping("Candy");
+                    cafe.addTargetTopping("Candy");
                 },
                 () -> {
                     Ingredient ing = new Ingredient("Strawberry", "Batter");
@@ -122,7 +119,7 @@ public class GamePanel extends JPanel implements Runnable {
                     ing.startFalling(55, 250);
                     cafeObjects.add(ing);
 
-                    currentActiveCake.addBatter("Strawberry");
+                    cafe.addBatter("Strawberry");
                 },
                 () -> {
                     Ingredient ing = new Ingredient("Strawberry", "Icing");
@@ -130,7 +127,7 @@ public class GamePanel extends JPanel implements Runnable {
                     ing.startFalling(265, 250);
                     cafeObjects.add(ing);
 
-                    currentActiveCake.addIcing("Strawberry");
+                    cafe.addIcing("Strawberry");
                 },
                 () -> {
                     Ingredient ing = new Ingredient("smiley", "Topping");
@@ -138,7 +135,7 @@ public class GamePanel extends JPanel implements Runnable {
                     ing.startFalling(460, 250);
                     cafeObjects.add(ing);
 
-                    currentActiveCake.addTargetTopping("Smiley");
+                    cafe.addTargetTopping("Smiley");
                 },
                 () -> {
                     Ingredient ing = new Ingredient("Vanilla", "Batter");
@@ -146,7 +143,7 @@ public class GamePanel extends JPanel implements Runnable {
                     ing.startFalling(55, 250);
                     cafeObjects.add(ing);
 
-                    currentActiveCake.addBatter("Vanilla");
+                    cafe.addBatter("Vanilla");
                 },
                 () -> {
                     Ingredient ing = new Ingredient("Vanilla", "Icing");
@@ -154,7 +151,7 @@ public class GamePanel extends JPanel implements Runnable {
                     ing.startFalling(265, 250);
                     cafeObjects.add(ing);
 
-                    currentActiveCake.addIcing("Vanilla");
+                    cafe.addIcing("Vanilla");
                 },
                 () -> {
                     Ingredient ing = new Ingredient("clover", "Topping");
@@ -162,7 +159,7 @@ public class GamePanel extends JPanel implements Runnable {
                     ing.startFalling(460, 250);
                     cafeObjects.add(ing);
 
-                    currentActiveCake.addTargetTopping("Clover");
+                    cafe.addTargetTopping("Clover");
                 }
         };
 
