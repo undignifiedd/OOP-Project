@@ -48,7 +48,7 @@ public class GamePanel extends JPanel implements Runnable {
     private int rainSpawnCounter = 0; // COUNTER FOR RAIN SPAWN TIME IN BOSSFIGHT
     private int dodgeTextCounter = 180;
 
-    private Cafe activeCafe;
+    private Cafe currentActiveCake;
 
     public GamePanel() {
         this.setLayout(null);
@@ -82,8 +82,8 @@ public class GamePanel extends JPanel implements Runnable {
         int padding = 45;
 
 
-        activeCafe = new Cafe(5, 200);
-        cafeObjects.add(activeCafe);
+        currentActiveCake = new Cafe (5, 185); // Placed right under the batter station
+        cafeObjects.add(currentActiveCake);
 
         String[] sayings = {
                 "Chocolate", "Chocolate", "Candy",
@@ -97,54 +97,72 @@ public class GamePanel extends JPanel implements Runnable {
                     ing.loadImage();
                     ing.startFalling(55, 250);
                     cafeObjects.add(ing);
+
+                    currentActiveCake.addBatter("Chocolate");
                 },
                 () -> {
                     Ingredient ing = new Ingredient("Chocolate", "Icing");
                     ing.loadImage();
                     ing.startFalling(265, 250);
                     cafeObjects.add(ing);
+
+                    currentActiveCake.addIcing("Chocolate");
                 },
                 () -> {
                     Ingredient ing = new Ingredient("candy", "Topping");
                     ing.loadImage();
                     ing.startFalling(460, 250);
                     cafeObjects.add(ing);
+
+                    currentActiveCake.addTargetTopping("Candy");
                 },
                 () -> {
                     Ingredient ing = new Ingredient("Strawberry", "Batter");
                     ing.loadImage();
                     ing.startFalling(55, 250);
                     cafeObjects.add(ing);
+
+                    currentActiveCake.addBatter("Strawberry");
                 },
                 () -> {
                     Ingredient ing = new Ingredient("Strawberry", "Icing");
                     ing.loadImage();
                     ing.startFalling(265, 250);
                     cafeObjects.add(ing);
+
+                    currentActiveCake.addIcing("Strawberry");
                 },
                 () -> {
                     Ingredient ing = new Ingredient("smiley", "Topping");
                     ing.loadImage();
                     ing.startFalling(460, 250);
                     cafeObjects.add(ing);
+
+                    currentActiveCake.addTargetTopping("Smiley");
                 },
                 () -> {
                     Ingredient ing = new Ingredient("Vanilla", "Batter");
                     ing.loadImage();
                     ing.startFalling(55, 250);
                     cafeObjects.add(ing);
+
+                    currentActiveCake.addBatter("Vanilla");
                 },
                 () -> {
                     Ingredient ing = new Ingredient("Vanilla", "Icing");
                     ing.loadImage();
                     ing.startFalling(265, 250);
                     cafeObjects.add(ing);
+
+                    currentActiveCake.addIcing("Vanilla");
                 },
                 () -> {
                     Ingredient ing = new Ingredient("clover", "Topping");
                     ing.loadImage();
                     ing.startFalling(460, 250);
                     cafeObjects.add(ing);
+
+                    currentActiveCake.addTargetTopping("Clover");
                 }
         };
 

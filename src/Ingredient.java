@@ -12,7 +12,7 @@ public class Ingredient extends Entity implements GameObject {
     public Ingredient(String name, String type) {
         this.name = name;
         this.type = type;
-        this.speed = 2;
+        this.speed = 4;
 
     }
 
