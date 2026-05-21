@@ -1,10 +1,1 @@
-Sequence Number: 1
-Cake Number: 2
-Score: 3
-Sequence Score: 3
-----------
-Sequence Number: 1
-Cake Number: 3
-Score: 6
-Sequence Score: 6
-----------
+

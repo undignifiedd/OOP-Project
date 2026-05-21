@@ -47,6 +47,13 @@ public class GamePanel extends JPanel implements Runnable {
     private int rainSpawnCounter = 0; // COUNTER FOR RAIN SPAWN TIME IN BOSSFIGHT
     private int dodgeTextCounter = 180;
 
+    Rectangle howToPlayButton = new Rectangle(310, 200, 150, 60);
+    Rectangle backButton = new Rectangle(20, 20, 100, 40);
+
+    private boolean howToPlayPressed = false;
+    private boolean backButtonPressed = false;
+    private ImageIcon tutorialGif;
+
     private Cafe cafe;
 
     public GamePanel() {
@@ -70,6 +77,18 @@ public class GamePanel extends JPanel implements Runnable {
         bossFightObjects.add(player);
         customer = new Customer(this);
         bossFightObjects.add(customer);
+
+
+        try {
+            java.net.URL gifURL = getClass().getResource("Backgrounds/Tutorial.gif");
+            if (gifURL != null) {
+                tutorialGif = new ImageIcon(gifURL);
+            } else {
+                System.out.println("Error: Could not find Tutorial.gif at the specified path.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         addKeyListener(keyHandler);
         int btnWidth = 145;
@@ -177,8 +196,10 @@ public class GamePanel extends JPanel implements Runnable {
                 if (stateManager.getState() == 0) {
                     if (startButton.contains(e.getPoint())) {
                         startButtonPressed = true;
-                        repaint();
+                    } else if (howToPlayButton.contains(e.getPoint())) {
+                        howToPlayPressed = true;
                     }
+                    repaint();
                 } else if (stateManager.getState() == 1) {
                     for (CafeButton button : cafeButtons) {
                         if (button.getBounds().contains(e.getPoint())) {
@@ -190,6 +211,11 @@ public class GamePanel extends JPanel implements Runnable {
                 } else if (stateManager.getState() == 3) {
                     if (replayButton.contains(e.getPoint())) {
                         replayButtonPressed = true;
+                        repaint();
+                    }
+                } else if (stateManager.getState() == 4) {
+                    if (backButton.contains(e.getPoint())) {
+                        backButtonPressed = true;
                         repaint();
                     }
                 }
@@ -204,6 +230,11 @@ public class GamePanel extends JPanel implements Runnable {
                             x.printStackTrace();
                         }
                         stateManager.setState(1);
+                    } else if (howToPlayButton.contains(e.getPoint()) && howToPlayPressed) {
+                        stateManager.setState(4);
+                        /*if (gifLabel != null) {
+                            gifLabel.setVisible(true);
+                        }*/
                     }
                 } else if (stateManager.getState() == 1) {
                     for (CafeButton button : cafeButtons) {
@@ -223,7 +254,19 @@ public class GamePanel extends JPanel implements Runnable {
                         }
                         stateManager.setState(0);
                     }
+                } else if (stateManager.getState() == 4) {
+                    if (backButton.contains(e.getPoint()) && backButtonPressed) {
+                        stateManager.setState(0);
+                            /*if (gifLabel != null) {
+                                gifLabel.setVisible(false);
+                            }*/
+                        targetBackground = menuBackground;
+                        repaint();
+                    }
                 }
+
+                howToPlayPressed = false;
+                backButtonPressed = false;
                 startButtonPressed = false;
                 replayButtonPressed = false;
                 repaint();
@@ -232,7 +275,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         try {
             menuBackground = ImageIO.read(getClass().getResourceAsStream("Backgrounds/Menu Background.jpeg"));
-            cafeBackground = ImageIO.read(getClass().getResourceAsStream("Cake/pastel.jpg"));
+            cafeBackground = ImageIO.read(getClass().getResourceAsStream("Backgrounds/purple.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -342,6 +385,15 @@ public class GamePanel extends JPanel implements Runnable {
             g2.setColor(Color.WHITE);
             g2.setFont(new Font("Arial", Font.BOLD, 25));
             g2.drawString("START", startButton.x + 34, startButton.y + 35);
+
+            // how to play button
+            g2.setColor(howToPlayPressed ? new Color(70, 70, 70) : new Color(100, 100, 100)); // Dark grey scheme
+            g2.fillRoundRect(howToPlayButton.x, howToPlayButton.y, howToPlayButton.width, howToPlayButton.height, 20, 20);
+            g2.setColor(Color.darkGray);
+            g2.drawRoundRect(howToPlayButton.x, howToPlayButton.y, howToPlayButton.width, howToPlayButton.height, 20, 20);
+            g2.setColor(Color.WHITE);
+            g2.setFont(new Font("Arial", Font.BOLD, 18));
+            g2.drawString("HOW TO PLAY", howToPlayButton.x + 12, howToPlayButton.y + 36);
         }
 
         if (stateManager.getState() == 1) {
@@ -415,6 +467,28 @@ public class GamePanel extends JPanel implements Runnable {
             g2.setColor(Color.WHITE);
             g2.setFont(new Font("Arial", Font.BOLD, 22));
             g2.drawString("REPLAY", replayButton.x + 58, replayButton.y + 28);
+
+
+        } else if (stateManager.getState() == 4) {
+
+            if (tutorialGif != null) {
+                // Passing 'this' at the end is the magic trick—it tells Swing to repaint
+                // the panel automatically every time the GIF changes to its next frame!
+                g2.drawImage(tutorialGif.getImage(), 0, 0, screenWidth, screenHeight, this);
+            } else {
+                // Troubleshooting fallback text if the file layout fails to read
+                g2.setColor(Color.WHITE);
+                g2.drawString("GIF failed to load. Check console output or path location.", 100, 100);
+            }
+
+            g2.setColor(backButtonPressed ? new Color(150, 40, 40) : new Color(200, 50, 50)); // Crimson red
+            g2.fillRoundRect(backButton.x, backButton.y, backButton.width, backButton.height, 10, 10);
+            g2.setColor(Color.BLACK);
+            g2.setStroke(new BasicStroke(2));
+            g2.drawRoundRect(backButton.x, backButton.y, backButton.width, backButton.height, 10, 10);
+            g2.setColor(Color.WHITE);
+            g2.setFont(new Font("Arial", Font.BOLD, 16));
+            g2.drawString("BACK", backButton.x + 26, backButton.y + 25);
         }
         if (stateManager.getFading()) {
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, stateManager.getFadeAlpha()));
