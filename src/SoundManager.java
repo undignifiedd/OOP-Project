@@ -1,44 +1,41 @@
-import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.*;
+import java.net.URL;
 
 public class SoundManager {
     private Clip clip;
 
-    public void playMusic(String path){
-        AudioInputStream audio;
+    public void playMusic(String path) {
         try {
-                audio = AudioSystem.getAudioInputStream(
-                        getClass().getResourceAsStream(path));
-
-            clip=AudioSystem.getClip();
+            URL url = getClass().getResource(path);
+            AudioInputStream audio = AudioSystem.getAudioInputStream(url);
+            clip = AudioSystem.getClip();
             clip.open(audio);
             clip.loop(Clip.LOOP_CONTINUOUSLY);
             clip.start();
-
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    public void stopMusic(){
-        if (clip!=null){
+
+    public void stopMusic() {
+        if (clip != null) {
             clip.stop();
         }
     }
+
     public void playOnce(String path, Runnable onFinish) {
         try {
-            AudioInputStream audio = AudioSystem.getAudioInputStream(
-                    getClass().getResourceAsStream(path)
-            );
-            Clip clip = AudioSystem.getClip();
-            clip.open(audio);
-            clip.addLineListener(event -> {
+            URL url = getClass().getResource(path);
+            AudioInputStream audio = AudioSystem.getAudioInputStream(url);
+            Clip c = AudioSystem.getClip();
+            c.open(audio);
+            c.addLineListener(event -> {
                 if (event.getType() == LineEvent.Type.STOP) {
-                    clip.close();
+                    c.close();
                     if (onFinish != null) onFinish.run();
                 }
             });
-            clip.start();
+            c.start();
         } catch (Exception e) {
             e.printStackTrace();
         }

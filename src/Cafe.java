@@ -33,11 +33,11 @@ public class Cafe extends Entity implements GameObject {
 
     public void getMachineImages() {
         try {
-            batter = ImageIO.read(getClass().getResourceAsStream("Cake/batter.png"));
-            frosting = ImageIO.read(getClass().getResourceAsStream("Cake/frosting.png"));
-            toppings = ImageIO.read(getClass().getResourceAsStream("Cake/toppings.png"));
-            chef = ImageIO.read(getClass().getResourceAsStream("Cake/chef.png"));
-            pan = ImageIO.read(getClass().getResourceAsStream("Cake/pan.png"));
+            batter = ImageIO.read(getClass().getResourceAsStream("/Cake/batter.png"));
+            frosting = ImageIO.read(getClass().getResourceAsStream("/Cake/frosting.png"));
+            toppings = ImageIO.read(getClass().getResourceAsStream("/Cake/toppings.png"));
+            chef = ImageIO.read(getClass().getResourceAsStream("/Cake/chef.png"));
+            pan = ImageIO.read(getClass().getResourceAsStream("/Cake/pan.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -45,21 +45,21 @@ public class Cafe extends Entity implements GameObject {
 
     private void loadImages() {
         try {
-            panEmptyImg = ImageIO.read(getClass().getResourceAsStream("Cake/pan.png"));
+            panEmptyImg = ImageIO.read(getClass().getResourceAsStream("/Cake/pan.png"));
             // batter images
-            chocoBatter = ImageIO.read(getClass().getResourceAsStream("Cake/chocolate_batter.png"));
-            vanillaBatter = ImageIO.read(getClass().getResourceAsStream("Cake/vanilla_batter.png"));
-            strawberryBatter = ImageIO.read(getClass().getResourceAsStream("Cake/strawberry_batter.png"));
+            chocoBatter = ImageIO.read(getClass().getResourceAsStream("/Cake/chocolate_batter.png"));
+            vanillaBatter = ImageIO.read(getClass().getResourceAsStream("/Cake/vanilla_batter.png"));
+            strawberryBatter = ImageIO.read(getClass().getResourceAsStream("/Cake/strawberry_batter.png"));
 
             // icing images
-            choco = ImageIO.read(getClass().getResourceAsStream("Ingredients/chocolateIcing.png"));
-            strawberry = ImageIO.read(getClass().getResourceAsStream("Ingredients/strawberryIcing.png"));
-            vanilla = ImageIO.read(getClass().getResourceAsStream("Ingredients/vanillaIcing.png"));
+            choco = ImageIO.read(getClass().getResourceAsStream("/Ingredients/chocolateIcing.png"));
+            strawberry = ImageIO.read(getClass().getResourceAsStream("/Ingredients/strawberryIcing.png"));
+            vanilla = ImageIO.read(getClass().getResourceAsStream("/Ingredients/vanillaIcing.png"));
 
             // toppings images
-            smiley = ImageIO.read(getClass().getResourceAsStream("Ingredients/smileyTopping.png"));
-            candy = ImageIO.read(getClass().getResourceAsStream("Ingredients/candyTopping.png"));
-            clover = ImageIO.read(getClass().getResourceAsStream("Ingredients/cloverTopping.png"));
+            smiley = ImageIO.read(getClass().getResourceAsStream("/Ingredients/smileyTopping.png"));
+            candy = ImageIO.read(getClass().getResourceAsStream("/Ingredients/candyTopping.png"));
+            clover = ImageIO.read(getClass().getResourceAsStream("/Ingredients/cloverTopping.png"));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -135,7 +135,7 @@ public class Cafe extends Entity implements GameObject {
             img = layer.getIngredient().getImage();
             if (type.equals("BATTER")) {
                 try {
-                    img = ImageIO.read(getClass().getResourceAsStream("Cake/" + name + "_" + type.toLowerCase()+".png"));
+                    img = ImageIO.read(getClass().getResourceAsStream("/Cake/" + name + "_" + type.toLowerCase()+".png"));
                 }
                 catch (IOException e){
                     e.printStackTrace();

@@ -26,7 +26,7 @@ public class Ingredient extends Entity implements GameObject {
 
     public void loadImage() {
         try {
-            String path = "Ingredients/" + name.toLowerCase() + type.charAt(0) + type.substring(1).toLowerCase() + ".png";
+            String path = "/Ingredients/" + name.toLowerCase() + type.charAt(0) + type.substring(1).toLowerCase() + ".png";
             image = ImageIO.read(getClass().getResourceAsStream(path));
         } catch (IOException e) {
             e.printStackTrace();

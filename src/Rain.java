@@ -13,7 +13,7 @@ public class Rain implements GameObject {
 
     public Rain(){
         try{
-            rainImage = ImageIO.read(getClass().getResourceAsStream("Backgrounds/RainDrop.png"));
+            rainImage = ImageIO.read(getClass().getResourceAsStream("/Backgrounds/RainDrop.png"));
         }
         catch (IOException e){
             e.printStackTrace();

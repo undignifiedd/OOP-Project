@@ -81,4 +81,5 @@ public class FileManager {
     public int getHighScore() {
         return highScore;
     }
+
 }

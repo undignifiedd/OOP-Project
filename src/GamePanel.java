@@ -291,16 +291,16 @@ public class GamePanel extends JPanel implements Runnable {
         });
 
         try {
-            menuBackground = ImageIO.read(getClass().getResourceAsStream("Backgrounds/Menu Background.jpeg"));
-            cafeBackground = ImageIO.read(getClass().getResourceAsStream("Backgrounds/purple.png"));
-            gameWinningBackground = ImageIO.read(getClass().getResourceAsStream("Backgrounds/GameWinning.png"));
+            menuBackground = ImageIO.read(getClass().getResourceAsStream("/Backgrounds/Menu Background.jpeg"));
+            cafeBackground = ImageIO.read(getClass().getResourceAsStream("/Backgrounds/purple.png"));
+            gameWinningBackground = ImageIO.read(getClass().getResourceAsStream("/Backgrounds/GameWinning.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            image1 = ImageIO.read(getClass().getResourceAsStream("Ingredients/candyTopping.png"));
-            image2 = ImageIO.read(getClass().getResourceAsStream("Ingredients/smileyTopping.png"));
-            image3 = ImageIO.read(getClass().getResourceAsStream("Ingredients/cloverTopping.png"));
+            image1 = ImageIO.read(getClass().getResourceAsStream("/Ingredients/candyTopping.png"));
+            image2 = ImageIO.read(getClass().getResourceAsStream("/Ingredients/smileyTopping.png"));
+            image3 = ImageIO.read(getClass().getResourceAsStream("/Ingredients/cloverTopping.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
