@@ -115,6 +115,7 @@ public class StateManager {
         score += cakeScore;
         sequenceScore += cakeScore;
         cakeNo++;
+        fileManager.log(sequenceNo, cakeNo, score, sequenceScore, sequenceStartScore);
         System.out.println("correct: " + correct + " layers: " + playerCake.getCakeLayers().length);
         for (int i = 0; i < playerCake.getCakeLayers().length; i++) {
             CakeLayer p = playerCake.getCakeLayers()[i];
