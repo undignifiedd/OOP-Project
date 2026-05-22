@@ -24,7 +24,7 @@ public class GamePanel extends JPanel implements Runnable {
     private static java.util.concurrent.CopyOnWriteArrayList<GameObject> bossFightObjects;
     private Thread gameThread;
 
-    private BufferedImage menuBackground, cafeBackground, gameWinningBackground;
+    private BufferedImage menuBackground, cafeBackground, bossFightBackground,gameWinningBackground;
     private BufferedImage targetBackground;
     private BufferedImage image1;
     private BufferedImage image2;
@@ -355,6 +355,7 @@ public class GamePanel extends JPanel implements Runnable {
 
 
         } else if (stateManager.getState() == 2) {
+            targetBackground = bossFightBackground;
             rainSpawnCounter++;  //SPAWNING RAIN
             if (rainSpawnCounter >= 2) {
                 rainSpawnCounter = 0;
@@ -421,7 +422,7 @@ public class GamePanel extends JPanel implements Runnable {
 
             //drawing rectangle on mr cakey
             g2.setColor(new Color(181, 196, 188));
-            g2.fill(new Rectangle(600, 170, 100, 100));
+            g2.fill(new Rectangle(590, 150, 120, 120));
             for (GameObject object : cafeObjects) {
                 if (object != null) {
                     object.draw(g2);

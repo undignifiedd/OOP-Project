@@ -32,7 +32,7 @@ public class StateManager {
 
     public static StateManager getInstance() {
         if (instance == null) {
-            instance = new StateManager(5);
+            instance = new StateManager(1);
         }
         return instance;
     }

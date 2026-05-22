@@ -118,6 +118,11 @@ public class Cafe extends Entity implements GameObject {
         g2.drawImage(frosting, 205, 0, 170, 200, null);
         g2.drawImage(toppings, 405, 0, 150, 200, null);
         g2.drawImage(chef, 600, 350, 175, 235, null);
+
+        //text
+        g2.setColor(new Color(9, 15, 130));
+        g2.setFont(new Font("Arial",Font.BOLD,30));
+        g2.drawString("Order: ", 605,180);
         int drawY = 200;
         Cake currentOrder = stateManager.getCurrentOrder();
         if (currentOrder == null) return; // safety check
