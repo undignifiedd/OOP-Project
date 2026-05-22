@@ -6,6 +6,8 @@ import javax.imageio.ImageIO;
 public class Player extends Entity implements GameObject {
     KeyHandler keyHandler;
     private StateManager stateManager;
+    private int health = 100;
+
     public Player(KeyHandler keyHandler) {
         this.keyHandler = keyHandler;
 
@@ -41,10 +43,10 @@ public class Player extends Entity implements GameObject {
         if (y < 0) {
             y = 0;
         }
-        if (x>226){
+        if (x>226){   //226
             x = 226;
         }
-        if (y>495){
+        if (y>495){  //495
             y= 495;
         }
         if (keyHandler.upKeyPressed) {
@@ -89,5 +91,11 @@ public class Player extends Entity implements GameObject {
         if (image != null) {
             g2.drawImage(image, x, y, 48, 96, null);
         }
+    }
+    public int getHealth(){
+        return health;
+    }
+    public void setHealth(int health){
+        this.health= health;
     }
 }
